@@ -1,13 +1,8 @@
 package com.playvoice.consulting.enitiy;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.playvoice.consulting.dto.Status;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,11 +13,20 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConsultationSession {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sessionId;
+
     private String userId;
     private String managerId;
+
     private LocalDateTime localDateTime;
     private LocalDate consultationDate;
+    private LocalDateTime reservationTime;
+    private LocalDateTime cancelTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Status status;
 }

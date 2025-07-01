@@ -67,7 +67,14 @@ import java.util.stream.Collectors;
 
             if (details != null) {
                 Map<String, Object> results = new HashMap<>();
-                results.put("consultationDetails", details);
+                results.put("sessionId", details.getSessionId());
+                results.put("userId", details.getUserId());
+                results.put("managerId", details.getManagerId());
+                results.put("consultationDate", details.getConsultationDate());
+                results.put("reservationTime", details.getReservationTime());
+                results.put("cancelTime", details.getCancelTime());
+                results.put("status", details.getStatus());
+                results.put("localDateTime", details.getLocalDateTime());
 
                 ResponseMessage responseMessage = new ResponseMessage(
                         HttpStatus.OK.value(),
@@ -87,12 +94,40 @@ import java.util.stream.Collectors;
             log.error("세션 ID {}에 대한 상담 세부 정보 조회 중 오류 발생: {}", sessionId, e.getMessage(), e);
             ResponseMessage errorResponse = new ResponseMessage(
                     HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                    "상담 세부 정보 조회에 실패했습니다. 서버 내부 오류.", // 좀 더 명확한 메시지
+                    "상담 세부 정보 조회에 실패했습니다. 서버 내부 오류.",
                     null
             );
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PatchMapping("/{sessionId}/cancel")
+    public ResponseEntity<ResponseMessage> cancelConsultation(@PathVariable Long sessionId) {
+        try {
+            ConsultationDetailsDto updated = consultationService.cancelConsultation(sessionId);
+
+            if (updated == null) {
+                return new ResponseEntity<>(new ResponseMessage(
+                        404, "해당 ID의 상담 세션이 존재하지 않습니다.", null),
+                        HttpStatus.NOT_FOUND);
+            }
+
+            Map<String, Object> results = new HashMap<>();
+            results.put("sessionId", updated.getSessionId());
+            results.put("cancelTime", updated.getCancelTime());
+            results.put("status", updated.getStatus());
+
+            return new ResponseEntity<>(new ResponseMessage(
+                    200, "상담 예약이 성공적으로 취소되었습니다.", results
+            ), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("예약 취소 중 오류 발생: {}", e.getMessage(), e);
+            return new ResponseEntity<>(new ResponseMessage(
+                    500, "예약 취소 중 서버 오류", null
+            ), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseMessage> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, Object> errors = ex.getBindingResult()
