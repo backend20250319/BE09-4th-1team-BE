@@ -1,0 +1,2 @@
+rootProject.name = 'BE09-4th-1team-BE'
+include 'comment-service', 'post-service'
