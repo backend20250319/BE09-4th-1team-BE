@@ -1,13 +1,13 @@
-package com.playvoice.consulting;
+package com.playvoice.postservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ConsultingServiceApplicationTests {
+class PostServiceApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
