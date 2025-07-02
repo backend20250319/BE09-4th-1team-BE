@@ -20,6 +20,12 @@ public class ConsultationSession {
     private String managerId;
     private LocalDateTime localDateTime;
     private LocalDate consultationDate;
+    private LocalDateTime reservationTime;
+    private LocalDateTime cancelTime;
     private String consultationText;
     private Long review;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private Status status;
 }

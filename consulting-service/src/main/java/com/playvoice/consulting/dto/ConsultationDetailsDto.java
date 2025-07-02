@@ -28,6 +28,10 @@ public class ConsultationDetailsDto {
 
     @NotNull
     private LocalDateTime localDateTime;
+    private LocalDateTime reservationTime;
+    private LocalDateTime cancelTime;
+    private Status status;
+
 
     private String consultationText;
 
