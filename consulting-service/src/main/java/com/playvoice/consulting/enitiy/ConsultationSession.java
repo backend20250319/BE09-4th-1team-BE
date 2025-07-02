@@ -13,20 +13,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConsultationSession {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sessionId;
-
     private String userId;
     private String managerId;
-
     private LocalDateTime localDateTime;
     private LocalDate consultationDate;
-    private LocalDateTime reservationTime;
-    private LocalDateTime cancelTime;
-
-    @Enumerated(EnumType.STRING)
-    @Column
-    private Status status;
+    private String consultationText;
+    private Long review;
 }

@@ -13,7 +13,7 @@ import java.util.Map;
 @ToString
 public class ResponseMessage {
 
-    private int httpStatus;
+    //    private int httpStatus;
     private String message;
     private Map<String, Object> results;
 }
