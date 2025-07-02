@@ -3,6 +3,7 @@ package com.playvoice.consulting.controller;
 import com.playvoice.consulting.dto.ConsultationDetailsDto;
 import com.playvoice.consulting.dto.ConsultationFeedbackDto;
 import com.playvoice.consulting.dto.ResponseMessage;
+import com.playvoice.consulting.dto.StatusUpdateRequestDto;
 import com.playvoice.consulting.service.ConsultationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -82,6 +83,7 @@ public class ConsultationController {
     }
 
     // 3. 피드백 및 평점 작성 API
+
     @PostMapping("/{sessionId}/feedback")
     public ResponseEntity<ResponseMessage> submitFeedbackAndReview(
             @PathVariable Long sessionId,
@@ -101,8 +103,8 @@ public class ConsultationController {
                 );
             } else {
                 return new ResponseEntity<>(
-                        new ResponseMessage("해당 상담 세션을 찾을 수 없습니다.", null),
-                        HttpStatus.NOT_FOUND
+                        new ResponseMessage("상담완료 상태에서만 리뷰를 작성할 수 있습니다.", null),
+                        HttpStatus.BAD_REQUEST
                 );
             }
         } catch (Exception e) {
@@ -140,6 +142,37 @@ public class ConsultationController {
             log.error("예약 취소 중 오류 발생: {}", e.getMessage(), e);
             return new ResponseEntity<>(
                     new ResponseMessage("예약 취소 중 서버 오류", null),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    @PatchMapping("/{sessionId}/status")
+    public ResponseEntity<ResponseMessage> updateConsultationStatus(
+            @PathVariable Long sessionId,
+            @Valid @RequestBody StatusUpdateRequestDto requestDto) {
+        try {
+            ConsultationDetailsDto updated = consultationService.updateStatus(sessionId, requestDto.getStatus());
+
+            if (updated == null) {
+                return new ResponseEntity<>(
+                        new ResponseMessage("해당 ID의 상담 세션이 존재하지 않습니다.", null),
+                        HttpStatus.NOT_FOUND
+                );
+            }
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("sessionId", updated.getSessionId());
+            result.put("status", updated.getStatus());
+
+            return new ResponseEntity<>(
+                    new ResponseMessage("상담 세션 상태가 성공적으로 변경되었습니다.", result),
+                    HttpStatus.OK
+            );
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    new ResponseMessage("상담 세션 상태 변경 중 오류가 발생했습니다.", null),
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }

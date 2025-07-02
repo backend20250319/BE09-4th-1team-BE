@@ -44,6 +44,9 @@ public class ConsultationService {
         Optional<ConsultationSession> sessionOptional = consultationRepository.findById(sessionId);
         if (sessionOptional.isPresent()) {
             ConsultationSession session = sessionOptional.get();
+            if (session.getStatus() != Status.상담완료) {
+                return false;  // 상담이 완료되지 않았으면 저장하지 않음
+            }
             session.setConsultationText(consultationText);
             session.setReview(review);
             consultationRepository.save(session);
@@ -51,6 +54,7 @@ public class ConsultationService {
         }
         return false;
     }
+
 
     // 4. 예약 취소
     @Transactional
@@ -66,6 +70,18 @@ public class ConsultationService {
 
         consultationRepository.save(session);
 
+        return mapToDto(session);
+    }
+
+    @Transactional
+    public ConsultationDetailsDto updateStatus(Long sessionId, Status newStatus) {
+        Optional<ConsultationSession> optional = consultationRepository.findById(sessionId);
+        if (optional.isEmpty()) return null;
+
+        ConsultationSession session = optional.get();
+        session.setStatus(newStatus);
+
+        consultationRepository.save(session);
         return mapToDto(session);
     }
 
