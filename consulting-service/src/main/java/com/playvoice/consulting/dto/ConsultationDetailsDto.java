@@ -28,14 +28,9 @@ public class ConsultationDetailsDto {
 
     @NotNull
     private LocalDateTime localDateTime;
-    //시간
-    @NotBlank(message = "상담 피드백은 필수이며 비어있을 수 없습니다.")
-    @Size(min = 10, message = "상담 피드백은 최소 10자 이상으로 작성해야 합니다.")
+
     private String consultationText;
 
-    @NotNull(message = "별점을 남겨주세요.")
-    @Min(value=1,message = "최소 1점까지만 입니다.")
-    @Max(value=5,message = "최대 5까지 입니다.")
     private Long review;
 }
 
