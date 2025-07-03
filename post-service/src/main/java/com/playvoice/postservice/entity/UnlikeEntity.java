@@ -1,0 +1,24 @@
+package com.playvoice.postservice.entity;
+
+import com.playvoice.postservice.domain.SuggestionPost;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "tbl_unlike")
+@NoArgsConstructor
+@Getter
+public class UnlikeEntity {
+
+    @Id
+    @Embedded
+    private LikeEntityId id;
+
+    public UnlikeEntity(SuggestionPost post, Long userId) {
+        this.id = new LikeEntityId(post.getId(), userId, LikeTarget.SUGGESTION.name());
+    }
+}
