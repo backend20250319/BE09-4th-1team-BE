@@ -51,12 +51,13 @@ public class SuggestionPostService {
         SuggestionPost suggestionPost = suggestionPostRepository.findById(dto.suggestionPostId());
 
         // TODO 여기서 유저 확인
-        
+
         if (!suggestionPostRepository.checkLike(suggestionPost, dto.userId())) {
             suggestionPost.increaseLikeCount();
             suggestionPostRepository.saveLike(suggestionPost, dto.userId());
         } else {
             suggestionPost.decreaseLikeCount();
+            suggestionPostRepository.deleteLike(suggestionPost, dto.userId());
         }
 
         suggestionPostRepository.save(suggestionPost);
@@ -73,9 +74,15 @@ public class SuggestionPostService {
             suggestionPostRepository.saveUnlike(suggestionPost, dto.userId());
         } else {
             suggestionPost.decreaseUnlikeCount();
+            suggestionPostRepository.deleteUnlike(suggestionPost, dto.userId());
         }
         suggestionPostRepository.save(suggestionPost);
     }
 
 
+    public void deleteSuggestion(Long id) {
+
+        //TODO 여기서 userID 체크 한번 들어갸아됌
+        suggestionPostRepository.deleteById(id);
+    }
 }

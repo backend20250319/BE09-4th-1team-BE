@@ -15,4 +15,10 @@ public interface SuggestionPostRepository {
     public boolean checkUnlike(SuggestionPost suggestionPost, Long userId);
 
     public void saveUnlike(SuggestionPost suggestionPost, Long userId);
+
+    public void deleteById(Long id);
+
+    public void deleteLike(SuggestionPost suggestionPost, Long userId);
+
+    public void deleteUnlike(SuggestionPost suggestionPost, Long userId);
 }

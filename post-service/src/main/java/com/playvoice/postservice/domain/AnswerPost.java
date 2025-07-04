@@ -9,17 +9,18 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class AnswerPost extends Post {
 
-    private final Long suggestPostId;
+    private final Long suggestionPostId;
 
     // 새로운 AnswerPost 생성
     public static AnswerPost createDefaultAnswerPost(Long userId, String title, String content,
         Long suggestPostId) {
         return AnswerPost.builder()
+
             .id(null)
             .userId(userId)
             .title(title)
             .content(content)
-            .suggestPostId(suggestPostId)
+            .suggestionPostId(suggestPostId)
             .likeCount(new PositiveLongCounter(0L))
             .unlikeCount(new PositiveLongCounter(0L))
             .views(new PositiveLongCounter(0L))
@@ -41,7 +42,7 @@ public class AnswerPost extends Post {
         if (suggestPostId == null) {
             throw new IllegalArgumentException("suggestPostId가 Null 입니다.");
         }
-        this.suggestPostId = suggestPostId;
+        this.suggestionPostId = suggestPostId;
     }
 
     public void updateAnswerPost(Long userId, String title, String content) {

@@ -18,7 +18,7 @@ public abstract class Post {
     private final PositiveLongCounter views;
     private final PositiveLongCounter commentCount;
     private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
+    private LocalDateTime updatedAt;
 
     public Post(Long id, Long userId, String title, String content, PositiveLongCounter likeCount,
         PositiveLongCounter unlikeCount, PositiveLongCounter views,
@@ -101,6 +101,7 @@ public abstract class Post {
 
         this.title = title;
         this.content = content;
+        this.updatedAt = LocalDateTime.now();
     }
 
 

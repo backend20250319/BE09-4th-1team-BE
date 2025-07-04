@@ -9,6 +9,7 @@ import com.playvoice.postservice.service.SuggestionPostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,14 +43,14 @@ public class SuggestionPostController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<Long>> updateSuggestionPost(
-        @PathVariable Long id, @RequestBody UpdateSuggestionPostRequestDto dto) {
+        @PathVariable Long id, @Valid @RequestBody UpdateSuggestionPostRequestDto dto) {
 
         id = suggestionPostService.updateSuggestionPost(id, dto);
         return ResponseEntity.ok(ApiResponse.success(id));
     }
 
     @PostMapping("/like")
-    public ResponseEntity<ApiResponse<Void>> likeSuggestionPost(@RequestBody
+    public ResponseEntity<ApiResponse<Void>> likeSuggestionPost(@Valid @RequestBody
     LikeSuggestionPostRequestDto dto) {
         System.out.println(dto.suggestionPostId());
         suggestionPostService.likeSuggestion(dto);
@@ -57,10 +58,17 @@ public class SuggestionPostController {
     }
 
     @PostMapping("/unlike")
-    public ResponseEntity<ApiResponse<Void>> unlikeSuggestionPost(@RequestBody
+    public ResponseEntity<ApiResponse<Void>> unlikeSuggestionPost(@Valid @RequestBody
     LikeSuggestionPostRequestDto dto) {
         suggestionPostService.unlikeSuggestion(dto);
         return ResponseEntity.ok(ApiResponse.success(null));
 
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteSuggestionPost(@PathVariable Long id) {
+        suggestionPostService.deleteSuggestion(id);
+
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 }

@@ -38,6 +38,12 @@ public class SuggestionPostRepositoryImpl implements SuggestionPostRepository {
     }
 
     @Override
+    public void deleteById(Long id) {
+        jpaSuggestionPostRepository.deleteById(id);
+    }
+
+
+    @Override
     public boolean checkLike(SuggestionPost suggestionPost, Long userId) {
 
         return jpaLikeRepository.existsById(new LikeEntity(suggestionPost, userId).getId());
@@ -58,5 +64,13 @@ public class SuggestionPostRepositoryImpl implements SuggestionPostRepository {
         jpaUnlikeRepository.save(new UnlikeEntity(suggestionPost, userId));
     }
 
+    @Override
+    public void deleteLike(SuggestionPost suggestionPost, Long userId) {
+        jpaLikeRepository.deleteById(new LikeEntity(suggestionPost, userId).getId());
+    }
 
+    @Override
+    public void deleteUnlike(SuggestionPost suggestionPost, Long userId) {
+        jpaUnlikeRepository.deleteById(new LikeEntity(suggestionPost, userId).getId());
+    }
 }

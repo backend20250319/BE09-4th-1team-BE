@@ -1,5 +1,6 @@
 package com.playvoice.postservice.entity;
 
+import com.playvoice.postservice.domain.AnswerPost;
 import com.playvoice.postservice.domain.SuggestionPost;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -20,5 +21,9 @@ public class UnlikeEntity {
 
     public UnlikeEntity(SuggestionPost post, Long userId) {
         this.id = new LikeEntityId(post.getId(), userId, LikeTarget.SUGGESTION.name());
+    }
+
+    public UnlikeEntity(AnswerPost post, Long userId) {
+        this.id = new LikeEntityId(post.getId(), userId, LikeTarget.ANSWER.name());
     }
 }
