@@ -1,5 +1,6 @@
 package com.playvoice.postservice.domain;
 
+import com.playvoice.postservice.answer.domain.AnswerPost;
 import org.junit.jupiter.api.Test;
 
 class AnswerPostTest {
