@@ -1,0 +1,9 @@
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+
+jwt:
+  secret: L7QnwrDXHgS2sCRlO0FCcIAFuzQeNZoIgN4jacnQBZz9NW3if0AMBPs0auQUX72M2BYnLE06clGfHDyH6KxKGQ==
+  expiration: 1800000
+  refresh-expiration: 604800000
