@@ -5,6 +5,9 @@
       <module name="discovery-service" options="-parameters" />
       <module name="discovery-service.main" options="-parameters" />
       <module name="discovery-service.test" options="-parameters" />
+      <module name="gateway-service" options="-parameters" />
+      <module name="gateway-service.main" options="-parameters" />
+      <module name="gateway-service.test" options="-parameters" />
       <module name="user-service" options="-parameters" />
       <module name="user-service.main" options="-parameters" />
       <module name="user-service.test" options="-parameters" />
