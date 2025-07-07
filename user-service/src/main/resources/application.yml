@@ -23,12 +23,12 @@ management:
   endpoint:
     health:
       show-details: always
-
 server:
   port: 8001
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${spring.application.instance.id:${random.value}}
+    instance-id: ${spring.application.name}:instance-${random.uuid}
+
   client:
     register-with-eureka: true
     fetch-registry: true

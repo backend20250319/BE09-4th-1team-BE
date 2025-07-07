@@ -1,9 +1,20 @@
 package com.playvoice.userservice.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user_tbl")
@@ -47,4 +58,26 @@ public class User {
 
     @Column(nullable = false)
     private LocalDateTime lastLogin;
+
+    public void changePassword(String encodedPassword) {
+        this.password = encodedPassword;
+        this.passwordStatus = PasswordStatus.CHANGED;
+        this.lastChangedPassword = LocalDateTime.now();
+    }
+
+    public void changeEmail(String newEmail) {
+        this.email = newEmail;
+    }
+
+    public void changeName(String newName) {
+        this.username = newName;
+    }
+
+    public void setPasswordStatus(PasswordStatus passwordStatus) {
+        this.passwordStatus = passwordStatus;
+    }
+
+    public void setIsBanned(boolean isBanned) {
+        this.isBanned = isBanned;
+    }
 }
