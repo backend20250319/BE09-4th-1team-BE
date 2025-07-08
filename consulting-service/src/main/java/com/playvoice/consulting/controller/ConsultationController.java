@@ -1,9 +1,6 @@
 package com.playvoice.consulting.controller;
 
-import com.playvoice.consulting.dto.ConsultationDetailsDto;
-import com.playvoice.consulting.dto.ConsultationFeedbackDto;
-import com.playvoice.consulting.dto.ResponseMessage;
-import com.playvoice.consulting.dto.StatusUpdateRequestDto;
+import com.playvoice.consulting.dto.*;
 import com.playvoice.consulting.service.ConsultationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/consultation")
@@ -77,6 +75,56 @@ public class ConsultationController {
             log.error("상담 세부 정보 조회 중 오류 발생: {}", e.getMessage(), e);
             return new ResponseEntity<>(
                     new ResponseMessage("상담 세부 정보 조회에 실패했습니다. 서버 내부 오류.", null),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    // 유저 ID 조회
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<ResponseMessage> getConsultationsByUserId(@PathVariable String userId) {
+        try {
+            List<ConsultationByUserDto> consultations = consultationService.getConsultationsByUserId(userId);
+            Map<String, Object> result = new HashMap<>();
+            result.put("consultations", consultations);
+
+            return ResponseEntity.ok(new ResponseMessage("유저의 상담 예약 목록을 성공적으로 조회했습니다.", result));
+        } catch (Exception e) {
+            log.error("유저 예약 조회 중 오류 발생: {}", e.getMessage(), e);
+            return new ResponseEntity<>(new ResponseMessage("유저 상담 조회 실패", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // 매니저 ID 조회
+    @GetMapping("/manager/{managerId}")
+    public ResponseEntity<ResponseMessage> getConsultationsByManagerId(@PathVariable String managerId) {
+        try {
+            List<ConsultationByManagerDto> consultations = consultationService.getConsultationsByManagerId(managerId);
+            Map<String, Object> result = new HashMap<>();
+            result.put("consultations", consultations);
+
+            return ResponseEntity.ok(new ResponseMessage("매니저의 상담 예약 목록을 성공적으로 조회했습니다.", result));
+        } catch (Exception e) {
+            log.error("매니저 예약 조회 중 오류 발생: {}", e.getMessage(), e);
+            return new ResponseEntity<>(new ResponseMessage("매니저 상담 조회 실패", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    //상태별 조회
+    @GetMapping("/status")
+    public ResponseEntity<ResponseMessage> getConsultationsByStatus(@RequestParam("status") Status status) {
+        try {
+            List<ConsultationDetailsDto> results = consultationService.getConsultationsByStatus(status);
+            Map<String, Object> response = new HashMap<>();
+            response.put("consultations", results);
+
+            return new ResponseEntity<>(
+                    new ResponseMessage("해당 상태의 상담 세션 목록입니다.", response),
+                    HttpStatus.OK
+            );
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    new ResponseMessage("상담 세션 조회 중 오류 발생", null),
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }

@@ -7,8 +7,10 @@ import com.playvoice.consulting.repository.ConsultationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.playvoice.consulting.dto.ConsultationByUserDto;
+import com.playvoice.consulting.dto.ConsultationByManagerDto;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,7 +57,6 @@ public class ConsultationService {
         return false;
     }
 
-
     // 4. 예약 취소
     @Transactional
     public ConsultationDetailsDto cancelConsultation(Long sessionId) {
@@ -65,14 +66,50 @@ public class ConsultationService {
         }
 
         ConsultationSession session = sessionOptional.get();
-        session.setStatus(Status.예약취소); // 예약취소 상태로 변경
+        session.setStatus(Status.예약취소);
         session.setCancelTime(LocalDateTime.now());
 
         consultationRepository.save(session);
-
         return mapToDto(session);
     }
 
+    // 유저 ID 기준 조회 → managerId 출력
+    @Transactional(readOnly = true)
+    public List<ConsultationByUserDto> getConsultationsByUserId(String userId) {
+        return consultationRepository.findByUserId(userId).stream()
+                .map(session -> ConsultationByUserDto.builder()
+                        .sessionId(session.getSessionId())
+                        .managerId(session.getManagerId())
+                        .consultationDate(session.getConsultationDate())
+                        .localDateTime(session.getLocalDateTime())
+                        .status(session.getStatus())
+                        .build())
+                .toList();
+    }
+
+    // 매니저 ID 기준 조회 → userId 출력
+    @Transactional(readOnly = true)
+    public List<ConsultationByManagerDto> getConsultationsByManagerId(String managerId) {
+        return consultationRepository.findByManagerId(managerId).stream()
+                .map(session -> ConsultationByManagerDto.builder()
+                        .sessionId(session.getSessionId())
+                        .userId(session.getUserId())
+                        .consultationDate(session.getConsultationDate())
+                        .localDateTime(session.getLocalDateTime())
+                        .status(session.getStatus())
+                        .build())
+                .toList();
+    }
+
+    // 상태(status)로 조회
+    @Transactional(readOnly = true)
+    public List<ConsultationDetailsDto> getConsultationsByStatus(Status status) {
+        return consultationRepository.findByStatus(status).stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    // 상태 업데이트
     @Transactional
     public ConsultationDetailsDto updateStatus(Long sessionId, Status newStatus) {
         Optional<ConsultationSession> optional = consultationRepository.findById(sessionId);
@@ -80,8 +117,8 @@ public class ConsultationService {
 
         ConsultationSession session = optional.get();
         session.setStatus(newStatus);
-
         consultationRepository.save(session);
+
         return mapToDto(session);
     }
 
