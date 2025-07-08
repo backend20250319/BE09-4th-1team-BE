@@ -1,0 +1,36 @@
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql.coffit.xyz:3322/playvoicedb
+    username: playvoice
+    password: playvoice
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+management:
+  endpoint:
+    web:
+      exposure:
+        include: health,info
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka:eureka123@localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.uuid}
+
+jwt:
+  secret: L7QnwrDXHgS2sCRlO0FCcIAFuzQeNZoIgN4jacnQBZz9NW3if0AMBPs0auQUX72M2BYnLE06clGfHDyH6KxKGQ==
+  expiration: 1800000
+  refresh-expiration: 604800000

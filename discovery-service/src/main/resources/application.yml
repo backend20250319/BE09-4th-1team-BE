@@ -1,12 +1,14 @@
 server:
   port: 8761
+
 spring:
   application:
     name: discovery-service
-  security:
-    user:
-      name: eureka
-      password: eureka123
+  # security:
+  #   user:
+  #     name: eureka
+  #     password: eureka123
+
 eureka:
   client:
     register-with-eureka: false

@@ -9,11 +9,11 @@ spring:
     gateway:
       routes:
         - id: user-service
-          uri: lb://USER-SERVICE
+          uri: lb://PLAYVOICE-USER-SERVICE
           predicates:
-            - Path=/api/v1/user-service/**
+            - Path=/api/v1/user-service/auth/**
           filters:
-            - RewritePath=/api/v1/user-service/(?<segment>.*), /${segment}
+            - RewritePath=/api/v1/user-service/auth/(?<segment>.*), /api/auth/${segment}
         - id: post-service
           uri: lb://POST-SERVICE
           predicates:
@@ -32,14 +32,6 @@ spring:
             - Path=/api/v1/consulting-service/**
           filters:
             - RewritePath=/api/v1/consulting-service/(?<segment>.*), /${segment}
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-
 
 springdoc:
   swagger-ui:
