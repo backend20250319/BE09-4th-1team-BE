@@ -103,11 +103,31 @@ public class ConsultationService {
 
     // 상태(status)로 조회
     @Transactional(readOnly = true)
-    public List<ConsultationDetailsDto> getConsultationsByStatus(Status status) {
-        return consultationRepository.findByStatus(status).stream()
-                .map(this::mapToDto)
+    public List<ConsultationByUserDto> getConsultationsByUserIdAndStatus(String userId, Status status) {
+        return consultationRepository.findByUserIdAndStatus(userId, status).stream()
+                .map(session -> ConsultationByUserDto.builder()
+                        .sessionId(session.getSessionId())
+                        .managerId(session.getManagerId())
+                        .consultationDate(session.getConsultationDate())
+                        .localDateTime(session.getLocalDateTime())
+                        .status(session.getStatus())
+                        .build())
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<ConsultationByManagerDto> getConsultationsByManagerIdAndStatus(String managerId, Status status) {
+        return consultationRepository.findByManagerIdAndStatus(managerId, status).stream()
+                .map(session -> ConsultationByManagerDto.builder()
+                        .sessionId(session.getSessionId())
+                        .userId(session.getUserId())
+                        .consultationDate(session.getConsultationDate())
+                        .localDateTime(session.getLocalDateTime())
+                        .status(session.getStatus())
+                        .build())
+                .toList();
+    }
+
 
     // 상태 업데이트
     @Transactional

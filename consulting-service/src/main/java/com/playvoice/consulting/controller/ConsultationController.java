@@ -111,20 +111,37 @@ public class ConsultationController {
     }
 
     //상태별 조회
-    @GetMapping("/status")
-    public ResponseEntity<ResponseMessage> getConsultationsByStatus(@RequestParam("status") Status status) {
+    @GetMapping("/user/{userId}/status")
+    public ResponseEntity<ResponseMessage> getConsultationsByUserIdAndStatus(
+            @PathVariable String userId,
+            @RequestParam("status") Status status) {
         try {
-            List<ConsultationDetailsDto> results = consultationService.getConsultationsByStatus(status);
-            Map<String, Object> response = new HashMap<>();
-            response.put("consultations", results);
+            List<ConsultationByUserDto> consultations = consultationService.getConsultationsByUserIdAndStatus(userId, status);
+            Map<String, Object> result = new HashMap<>();
+            result.put("consultations", consultations);
 
-            return new ResponseEntity<>(
-                    new ResponseMessage("해당 상태의 상담 세션 목록입니다.", response),
-                    HttpStatus.OK
-            );
+            return ResponseEntity.ok(new ResponseMessage("유저 ID 및 상태로 조회 성공", result));
         } catch (Exception e) {
             return new ResponseEntity<>(
-                    new ResponseMessage("상담 세션 조회 중 오류 발생", null),
+                    new ResponseMessage("유저 상담 조회 중 오류", null),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    @GetMapping("/manager/{managerId}/status")
+    public ResponseEntity<ResponseMessage> getConsultationsByManagerIdAndStatus(
+            @PathVariable String managerId,
+            @RequestParam("status") Status status) {
+        try {
+            List<ConsultationByManagerDto> consultations = consultationService.getConsultationsByManagerIdAndStatus(managerId, status);
+            Map<String, Object> result = new HashMap<>();
+            result.put("consultations", consultations);
+
+            return ResponseEntity.ok(new ResponseMessage("매니저 ID 및 상태로 조회 성공", result));
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    new ResponseMessage("매니저 상담 조회 중 오류", null),
                     HttpStatus.INTERNAL_SERVER_ERROR
             );
         }

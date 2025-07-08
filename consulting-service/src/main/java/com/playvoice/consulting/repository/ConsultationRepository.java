@@ -9,5 +9,6 @@ import java.util.List;
 public interface ConsultationRepository extends JpaRepository<ConsultationSession, Long> {
     List<ConsultationSession> findByUserId(String userId);
     List<ConsultationSession> findByManagerId(String managerId);
-    List<ConsultationSession> findByStatus(Status status);
+    List<ConsultationSession> findByUserIdAndStatus(String userId, Status status);
+    List<ConsultationSession> findByManagerIdAndStatus(String managerId, Status status);
 }
