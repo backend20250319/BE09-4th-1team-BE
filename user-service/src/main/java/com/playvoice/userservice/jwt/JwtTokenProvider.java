@@ -68,4 +68,45 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
+    public String createAccessToken(String username, UserRole role) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + 15 * 60 * 1000); // 15minutes
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
+    }
+
+    public String createRefreshToken(String username, UserRole role) {
+        Date now = new Date();
+        Date expiry = new Date(now.getTime() + 60 * 60 * 1000); // 1hour
+
+        return Jwts.builder()
+                .setSubject(username)
+                .claim("role", role.name())
+                .setIssuedAt(now)
+                .setExpiration(expiry)
+                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .compact();
+    }
+
+    public String extractUsername(String token) {
+        return getClaims(token).getSubject();
+    }
+
+    public UserRole extractRole(String token) {
+        return UserRole.valueOf((String) getClaims(token).get("role"));
+    }
+
+    private Claims getClaims(String token) {
+        return Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
 }
