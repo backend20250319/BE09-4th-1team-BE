@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: PLAYVOICE-GATEWAY-SERVICE
   config:
     activate:
       on-profile: "dev"
@@ -7,7 +9,7 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://eureka:eureka123@localhost:8761/eureka
+      defaultZone: http://discovery-service-app:8761/eureka
 jwt:
   secret: L7QnwrDXHgS2sCRlO0FCcIAFuzQeNZoIgN4jacnQBZz9NW3if0AMBPs0auQUX72M2BYnLE06clGfHDyH6KxKGQ==
   expiration: 1800000

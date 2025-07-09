@@ -7,3 +7,8 @@ spring:
     name: PLAYVOICE-USER-SERVICE
   profiles:
     active: dev
+  data:
+    redis:
+      host: redis
+      port: 6379
+      timeout: 6
