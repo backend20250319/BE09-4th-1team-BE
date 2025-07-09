@@ -64,4 +64,21 @@ public class AuthController {
 
         return ResponseEntity.ok(new LoginResponse(newAccessToken, username, jwtTokenProvider.extractRole(refreshToken), null));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@CookieValue("refreshToken") String refreshToken) {
+        String username = jwtTokenProvider.extractUsername(refreshToken);
+
+        refreshTokenService.delete(username);
+
+        ResponseCookie deleteCookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, deleteCookie.toString())
+                .body("Logout successful");
+    }
 }

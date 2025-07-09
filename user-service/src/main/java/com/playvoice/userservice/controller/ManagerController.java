@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.playvoice.userservice.dto.CreateUserRequest;
 import com.playvoice.userservice.dto.ResetPasswordRequest;
 import com.playvoice.userservice.entity.PasswordStatus;
 import com.playvoice.userservice.entity.User;
@@ -57,6 +58,12 @@ public class ManagerController {
 
 
         return ResponseEntity.ok("Password has been reset and sent to email.");
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request) {
+        User user = userService.createUser(request);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/students/{id}/ban")
