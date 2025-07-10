@@ -1,0 +1,54 @@
+server:
+  port: 8000
+
+spring:
+  profiles:
+    active: dev # 현재 활성화할 프로파일
+  application:
+    name: PLAYVOICE-GATEWAY-SERVICE
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://PLAYVOICE-USER-SERVICE
+          predicates:
+            - Path=/api/v1/user-service/auth/**
+          filters:
+            - RewritePath=/api/v1/user-service/auth/(?<segment>.*), /api/auth/${segment}
+        - id: user-service-users
+          uri: lb://PLAYVOICE-USER-SERVICE
+          predicates:
+            - Path=/api/v1/user-service/users/**
+          filters:
+            - RewritePath=/api/v1/user-service/users/(?<segment>.*), /api/users/${segment}
+        - id: post-service
+          uri: lb://POST-SERVICE
+          predicates:
+            - Path=/api/v1/post-service/**
+          filters:
+            - RewritePath=/api/v1/post-service/(?<segment>.*), /${segment}
+        - id: comment-service
+          uri: lb://COMMENT-SERVICE
+          predicates:
+            - Path=/api/v1/comment-service/**
+          filters:
+            - RewritePath=/api/v1/comment-service/(?<segment>.*), /${segment}
+        - id: consulting-service
+          uri: lb://CONSULTING-SERVICE
+          predicates:
+            - Path=/api/v1/consulting-service/**
+          filters:
+            - RewritePath=/api/v1/consulting-service/(?<segment>.*), /${segment}
+
+springdoc:
+  swagger-ui:
+    urls-primary-name: user-service
+    urls:
+      - name: user-service
+        url: /api/v1/user-service/v3/api-docs
+      - name: post-service
+        url: /api/v1/post-service/v3/api-docs
+      - name: comment-service
+        url: /api/v1/comment-service/v3/api-docs
+      - name: consulting-service
+        url: /api/v1/consulting-service/v3/api-docs
