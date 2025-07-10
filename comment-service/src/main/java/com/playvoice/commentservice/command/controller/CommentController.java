@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +36,11 @@ public class CommentController {
             summary = "댓글 생성", description = "댓글을 생성합니다.", security = @SecurityRequirement(name = "Authorization"))
     @PostMapping
     public ResponseEntity<ApiResponse<CommentDTO>> createComment(
-//            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal String userId,
             @Valid @RequestBody CommentCreateRequest req) {
-        String userId = "1";
+//        String userId = "1";
+
+        System.out.println("userId = " + userId);
 
         CommentDTO commentDTO = commentService.createComment(req, Long.valueOf(userId));
 
