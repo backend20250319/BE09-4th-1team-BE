@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.playvoice.userservice.security.UserDetailsServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -49,8 +51,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (jwtTokenProvider.validateToken(token)) {
                 String username = jwtTokenProvider.extractUsername(token);
-
                 UserDetailsImpl user = (UserDetailsImpl) userDetailsService.loadUserByUsername(username);
+
+                String uri = request.getRequestURI();
+                String method = request.getMethod();
+                log.info("Authenticated user = {}, method = {}, uri = {}", username, method, uri);
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
@@ -59,7 +64,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
                 if (user.getPasswordStatus() == PasswordStatus.INIT
-                        && !request.getRequestURI().contains("/me/password")) {
+                        && !(uri.contains("/me/password") && method.equals("PUT"))) {
+                    log.warn("Blocked request from user '{}' with INIT password. URI: {}", username, uri);
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }

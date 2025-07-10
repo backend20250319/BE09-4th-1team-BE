@@ -38,6 +38,9 @@ public class User {
     private String password;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;      // MANAGER, STUDENT
 
@@ -70,7 +73,7 @@ public class User {
     }
 
     public void changeName(String newName) {
-        this.username = newName;
+        this.name = newName;
     }
 
     public void setPasswordStatus(PasswordStatus passwordStatus) {
