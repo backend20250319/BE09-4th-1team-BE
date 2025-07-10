@@ -1,10 +1,13 @@
 package com.playvoice.consulting.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,6 +28,13 @@ public class ConsultationDetailsDto {
 
     @NotNull
     private LocalDateTime localDateTime;
-    //시간
+    private LocalDateTime reservationTime;
+    private LocalDateTime cancelTime;
+    private Status status;
+
+
+    private String consultationText;
+
+    private Long review;
 }
 
