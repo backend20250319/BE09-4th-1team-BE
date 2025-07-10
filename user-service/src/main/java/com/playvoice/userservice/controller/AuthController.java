@@ -34,8 +34,8 @@ public class AuthController {
             throw new RuntimeException("Password Not Match");
         }
 
-        String accessToken = jwtTokenProvider.createAccessToken(user.getUsername(), user.getRole());
-        String refreshToken = jwtTokenProvider.createRefreshToken(user.getUsername(), user.getRole());
+        String accessToken = jwtTokenProvider.createAccessToken(user.getUsername(), user.getId(), user.getRole());
+        String refreshToken = jwtTokenProvider.createRefreshToken(user.getUsername(), user.getId(), user.getRole());
 
         refreshTokenService.save(user.getUsername(), refreshToken);
 
@@ -60,7 +60,8 @@ public class AuthController {
 
         refreshTokenService.extend(username);
 
-        String newAccessToken = jwtTokenProvider.createAccessToken(username, jwtTokenProvider.extractRole(refreshToken));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User Not Found"));
+        String newAccessToken = jwtTokenProvider.createAccessToken(username, user.getId(), jwtTokenProvider.extractRole(refreshToken));
 
         return ResponseEntity.ok(new LoginResponse(newAccessToken, username, jwtTokenProvider.extractRole(refreshToken), null));
     }

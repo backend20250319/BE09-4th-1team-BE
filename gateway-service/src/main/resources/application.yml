@@ -3,7 +3,7 @@ server:
 
 spring:
   profiles:
-    active: dev # 현재 활성화할 프로파일
+    active: dev
   application:
     name: PLAYVOICE-GATEWAY-SERVICE
   cloud:
@@ -12,27 +12,24 @@ spring:
         - id: user-service
           uri: lb://PLAYVOICE-USER-SERVICE
           predicates:
-            - Path=/api/v1/user-service/auth/**
+            - Path=/api/v1/user-service/**
           filters:
-            - RewritePath=/api/v1/user-service/auth/(?<segment>.*), /api/auth/${segment}
-        - id: user-service-users
-          uri: lb://PLAYVOICE-USER-SERVICE
-          predicates:
-            - Path=/api/v1/user-service/users/**
-          filters:
-            - RewritePath=/api/v1/user-service/users/(?<segment>.*), /api/users/${segment}
+            - RewritePath=/api/v1/user-service/(?<segment>.*), /api/${segment}
+
         - id: post-service
           uri: lb://POST-SERVICE
           predicates:
             - Path=/api/v1/post-service/**
           filters:
             - RewritePath=/api/v1/post-service/(?<segment>.*), /${segment}
+
         - id: comment-service
           uri: lb://COMMENT-SERVICE
           predicates:
             - Path=/api/v1/comment-service/**
           filters:
             - RewritePath=/api/v1/comment-service/(?<segment>.*), /${segment}
+
         - id: consulting-service
           uri: lb://CONSULTING-SERVICE
           predicates:

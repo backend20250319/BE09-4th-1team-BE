@@ -2,6 +2,7 @@ package com.playvoice.userservice.controller;
 
 import java.security.Principal;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,7 @@ import com.playvoice.userservice.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -34,6 +36,7 @@ public class UserController {
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request,
                                             Principal principal) {
+        log.info("changePassword: {}", request);
         String username = principal.getName();
 
         User user = userRepository.findByUsername(username)

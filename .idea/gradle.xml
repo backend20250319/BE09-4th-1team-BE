@@ -4,6 +4,20 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/comment-service" />
+            <option value="$PROJECT_DIR$/discovery-service" />
+            <option value="$PROJECT_DIR$/gateway-service" />
+            <option value="$PROJECT_DIR$/post-service" />
+            <option value="$PROJECT_DIR$/user-service" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/discovery-service" />
         <option name="gradleJvm" value="#JAVA_HOME" />
         <option name="modules">

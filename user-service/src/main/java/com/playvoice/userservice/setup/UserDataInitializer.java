@@ -27,6 +27,7 @@ public class UserDataInitializer implements CommandLineRunner {
                     .email("manager1@example.com")
                     .username("manager1")
                     .password(passwordEncoder.encode("manager1"))
+                    .name("Manager1")
                     .role(UserRole.MANAGER)
                     .course("Manager")
                     .isBanned(false)

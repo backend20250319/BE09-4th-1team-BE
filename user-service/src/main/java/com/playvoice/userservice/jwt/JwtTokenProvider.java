@@ -30,8 +30,9 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
-    public String createToken(String username, UserRole role) {
+    public String createToken(String username, Long userId, UserRole role) {
         Claims claims = Jwts.claims().setSubject(username);
+        claims.put("userId", userId);
         claims.put("role", role.name());
 
         Date now = new Date();
@@ -69,24 +70,27 @@ public class JwtTokenProvider {
         }
     }
 
-    public String createAccessToken(String username, UserRole role) {
+    public String createAccessToken(String username, Long userId, UserRole role) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + 15 * 60 * 1000); // 15minutes
 
         return Jwts.builder()
                 .setSubject(username)
+                .claim("userId", userId)
+                .claim("role", role.name())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
 
-    public String createRefreshToken(String username, UserRole role) {
+    public String createRefreshToken(String username, Long userId, UserRole role) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + 60 * 60 * 1000); // 1hour
 
         return Jwts.builder()
                 .setSubject(username)
+                .claim("userId", userId)
                 .claim("role", role.name())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
@@ -100,6 +104,10 @@ public class JwtTokenProvider {
 
     public UserRole extractRole(String token) {
         return UserRole.valueOf((String) getClaims(token).get("role"));
+    }
+
+    public Long extractUserId(String token) {
+        return getClaims(token).get("userId", Long.class);
     }
 
     private Claims getClaims(String token) {
