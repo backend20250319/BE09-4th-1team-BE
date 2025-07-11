@@ -1,0 +1,219 @@
+/* =============================
+   Login Page Layout (with Floating Labels)
+============================= */
+
+.login-page {
+    background-color: #000;
+    height: 1024px;
+    width: 100%;
+}
+
+.login-page .overlap-group {
+    background-image: url('../../assets/images/login-bg.png');
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 1024px;
+}
+
+.login-page .frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 287px;
+    position: relative;
+}
+
+.login-page .header {
+    width: 100%;
+    height: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 18px 48px;
+    background-color: transparent;
+    gap: 10px;
+    position: relative;
+}
+
+.login-page .div001 {
+    width: 1156px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 263px;
+    flex: 0 0 auto;
+    position: relative;
+}
+
+.login-page .frame001 {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex: 0 0 auto;
+    position: relative;
+}
+
+.login-page .advertisement-image {
+    width: 330px;
+    height: 330px;
+    border-radius: 30px;
+    object-fit: cover;
+    object-position: top;
+}
+
+.login-page .welcome-message {
+    width: 448px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    position: relative;
+}
+
+.login-page .welcome-title {
+    font-family: "Roboto-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+    align-self: stretch;
+    margin-top: -1px;
+}
+
+.login-page .welcome-description {
+    font-family: "Roboto-Regular", Helvetica;
+    font-size: 15px;
+    font-weight: 400;
+    color: white;
+    align-self: stretch;
+}
+
+.login-page .frame002 {
+    width: 330px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    position: relative;
+}
+
+.login-page .login-title {
+    font-family: "Roboto-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    align-self: stretch;
+    margin-top: -1px;
+}
+
+.login-page .frame003 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    flex: 0 0 auto;
+    align-self: stretch;
+    position: relative;
+}
+
+.login-page .login-input {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+    padding: 16px 12px 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    outline: none;
+}
+
+.label {
+    position: absolute;
+    top: 16px;
+    left: 12px;
+    font-size: 16px;
+    color: #aaa;
+    background-color: white;
+    padding: 0 4px;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.input:focus + .label,
+.input:not(:placeholder-shown) + .label {
+    top: 4px;
+    left: 8px;
+    font-size: 12px;
+    color: #333;
+}
+
+.multiply,
+.img {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.login-page .invalid-username-wrapper,
+.login-page .invalid-password-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    padding: 4px 12px;
+    justify-content: center;
+    position: relative;
+}
+
+.login-page .invalid-username,
+.login-page .invalid-password {
+    font-family: "Roboto-Regular", Helvetica;
+    font-size: 10px;
+    font-weight: 400;
+    white-space: nowrap;
+    width: fit-content;
+}
+
+.login-page .invalid-username {
+    color: transparent;
+}
+
+.login-page .invalid-password {
+    color: var(--playdata-purple-light);
+}
+
+.login-page .login-button {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    flex: 0 0 auto;
+    align-self: stretch;
+    position: relative;
+}
+
+.login-page .text-wrapper {
+    font-family: "Roboto-Regular", Helvetica;
+    font-size: 12px;
+    font-weight: 400;
+    color: #ffffff;
+    text-align: center;
+    line-height: 24px;
+    align-self: stretch;
+    position: relative;
+}
