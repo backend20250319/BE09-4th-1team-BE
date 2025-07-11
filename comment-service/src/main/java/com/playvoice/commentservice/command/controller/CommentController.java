@@ -1,5 +1,6 @@
 package com.playvoice.commentservice.command.controller;
 
+import com.playvoice.commentservice.command.dto.CommentCountDTO;
 import com.playvoice.commentservice.command.dto.CommentCreateRequest;
 import com.playvoice.commentservice.command.dto.CommentDTO;
 import com.playvoice.commentservice.command.dto.CommentUpdateRequest;
@@ -143,5 +144,26 @@ public class CommentController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(commentDTO));
+    }
+
+    /***
+     * 댓글 전체 개수 조회
+     * @param postId
+     * @return
+     */
+    @Operation(
+            summary = "댓글 전체 개수 조회",
+            description = "특정 게시글의 전체 댓글 개수를 반환합니다.",
+            security = @SecurityRequirement(name = "Authorization"))
+    @GetMapping("/posts/{postId}/count")
+    public ResponseEntity<ApiResponse<CommentCountDTO>> getCommentCount(
+            @PathVariable Long postId
+    ) {
+
+        CommentCountDTO commentCountDTO = commentService.getCommentCount(postId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(commentCountDTO));
     }
 }
