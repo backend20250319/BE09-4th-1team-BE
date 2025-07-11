@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/playvoicedb
+    username: root
+    password: 33921283
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop # 매번 초기화를 위해 create-drop 권장 (선택 사항)
+    properties:
+      hibernate:
+        format_sql: true # SQL 포맷팅 (선택 사항)
