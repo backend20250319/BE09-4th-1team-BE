@@ -36,9 +36,9 @@ public class CommentController {
             summary = "댓글 생성", description = "댓글을 생성합니다.", security = @SecurityRequirement(name = "Authorization"))
     @PostMapping
     public ResponseEntity<ApiResponse<CommentDTO>> createComment(
-            @AuthenticationPrincipal String userId,
+//            @AuthenticationPrincipal String userId,
             @Valid @RequestBody CommentCreateRequest req) {
-//        String userId = "1";
+        String userId = "1";
 
         System.out.println("userId = " + userId);
 
