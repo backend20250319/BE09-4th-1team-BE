@@ -1,9 +1,6 @@
 package com.playvoice.commentservice.command.service;
 
-import com.playvoice.commentservice.command.dto.AuthorDTO;
-import com.playvoice.commentservice.command.dto.CommentCreateRequest;
-import com.playvoice.commentservice.command.dto.CommentDTO;
-import com.playvoice.commentservice.command.dto.CommentUpdateRequest;
+import com.playvoice.commentservice.command.dto.*;
 import com.playvoice.commentservice.command.entity.Comment;
 import com.playvoice.commentservice.command.entity.Like;
 import com.playvoice.commentservice.command.entity.ReactionStatus;
@@ -96,15 +93,23 @@ public class CommentService {
 //                .collect(Collectors.toMap(AuthorDTO::getUserId, Function.identity()));
 
         return commentPage.map(comment -> {
-            int likeCount = comment.getLikes() != null ? comment.getLikes().size() : 0;
-            int unlikeCount = comment.getUnlikes() != null ? comment.getUnlikes().size() : 0;
+            int likeCount = comment.getLikes() != null ? comment.getLikes()
+                    .size() : 0;
+            int unlikeCount = comment.getUnlikes() != null ? comment.getUnlikes()
+                    .size() : 0;
 
             // 좋아요/싫어요
             ReactionStatus myReaction = ReactionStatus.NONE;
             Long currentUserId = Long.parseLong(userId);
-            if (comment.getLikes().stream().anyMatch(like -> like.getUserId().equals(currentUserId))) {
+            if (comment.getLikes()
+                    .stream()
+                    .anyMatch(like -> like.getUserId()
+                            .equals(currentUserId))) {
                 myReaction = ReactionStatus.LIKE;
-            } else if (comment.getUnlikes().stream().anyMatch(unlike -> unlike.getUserId().equals(currentUserId))) {
+            } else if (comment.getUnlikes()
+                    .stream()
+                    .anyMatch(unlike -> unlike.getUserId()
+                            .equals(currentUserId))) {
                 myReaction = ReactionStatus.UNLIKE;
             }
 
@@ -152,7 +157,8 @@ public class CommentService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
 
         // 2. 작성자 확인
-        if (!comment.getUserId().equals(userId)) {
+        if (!comment.getUserId()
+                .equals(userId)) {
             throw new SecurityException("본인의 댓글만 수정할 수 있습니다.");
         }
 
@@ -162,9 +168,15 @@ public class CommentService {
 
         // 좋아요/싫어요
         ReactionStatus myReaction = ReactionStatus.NONE;
-        if (comment.getLikes().stream().anyMatch(like -> like.getUserId().equals(userId))) {
+        if (comment.getLikes()
+                .stream()
+                .anyMatch(like -> like.getUserId()
+                        .equals(userId))) {
             myReaction = ReactionStatus.LIKE;
-        } else if (comment.getUnlikes().stream().anyMatch(unlike -> unlike.getUserId().equals(userId))) {
+        } else if (comment.getUnlikes()
+                .stream()
+                .anyMatch(unlike -> unlike.getUserId()
+                        .equals(userId))) {
             myReaction = ReactionStatus.UNLIKE;
         }
 
@@ -180,8 +192,10 @@ public class CommentService {
                         .build())
                 .content(comment.getContent())
                 .parentId(comment.getParentId())
-                .likeCount(comment.getLikes() != null ? comment.getLikes().size() : 0)
-                .unlikeCount(comment.getLikes() != null ? comment.getUnlikes().size() : 0)
+                .likeCount(comment.getLikes() != null ? comment.getLikes()
+                        .size() : 0)
+                .unlikeCount(comment.getLikes() != null ? comment.getUnlikes()
+                        .size() : 0)
                 .myReaction(myReaction)
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
@@ -193,7 +207,8 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
 
-        if (!comment.getUserId().equals(userId)) {
+        if (!comment.getUserId()
+                .equals(userId)) {
             throw new SecurityException("본인의 댓글만 삭제할 수 있습니다.");
         }
 
@@ -256,6 +271,12 @@ public class CommentService {
                 .myReaction(reactionStatus)
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
+                .build();
+    }
+
+    public CommentCountDTO getCommentCount(Long postId) {
+        return CommentCountDTO.builder()
+                .count(commentRepository.countByPostId(postId))
                 .build();
     }
 }

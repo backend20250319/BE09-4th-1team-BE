@@ -20,4 +20,4 @@ spring:
   profiles:
     active: dev
   application:
-    name: post-service
+    name: comment-service
