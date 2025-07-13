@@ -1,226 +1,360 @@
 .login-page {
-    background-color: #000;
-    height: 1024px;
-    width: 100%;
+  position: relative;
+  background-color: #000;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.login-page::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/assets/images/login-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: -1;
 }
 
 .login-page .overlap-group {
-    background-image: url('../../assets/images/login-bg.png');
-    background-position: 50% 50%;
-    background-size: cover;
-    height: 1024px;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding-bottom: px;
+
 }
 
 .login-page .frame {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 287px;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 287px;
+  position: relative;
 }
 
-.login-page .header {
-    width: 100%;
-    height: 24px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 18px 48px;
-    background-color: transparent;
-    gap: 10px;
-    position: relative;
+.header {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 48px;
+  box-sizing: border-box;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background: transparent;
+  transform: none !important;
+}
+
+.header img {
+  width: 133px;
+  height: 23px;
+  min-width: 133px;
+  min-height: 23px;
+  max-width: 133px;
+  max-height: 23px;
+  object-fit: contain;
 }
 
 .login-page .div001 {
-    width: 1156px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 263px;
-    flex: 0 0 auto;
-    position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
 }
 
 .login-page .frame001 {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    flex: 0 0 auto;
-    position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  justify-content: flex-start;
 }
 
-.login-page .advertisement-image {
-    width: 330px;
-    height: 330px;
-    border-radius: 30px;
-    object-fit: cover;
-    object-position: top;
+.advertisement-image {
+  width: 330px;
+  height: 330px;
+  border-radius: 30px;
+  object-fit: cover;
+  object-position: top;
+  background: #fff;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.08);
+  padding: 0;
 }
 
-.login-page .welcome-message {
-    width: 448px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    position: relative;
+.welcome-message {
+  width: 448px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 0;
 }
 
-.login-page .welcome-title {
-    font-family: "Roboto-Bold", Helvetica;
-    font-size: 24px;
-    font-weight: 700;
-    color: white;
-    align-self: stretch;
-    margin-top: -1px;
+.welcome-title {
+  font-family: "Roboto-Bold", Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  width: 448px;
 }
 
-.login-page .welcome-description {
-    font-family: "Roboto-Regular", Helvetica;
-    font-size: 15px;
-    font-weight: 400;
-    color: white;
-    align-self: stretch;
+.welcome-description {
+  font-family: "Roboto-Regular", Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #fff;
+  width: 448px;
 }
 
-.login-page .frame002 {
-    width: 330px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-    position: relative;
+.frame002 {
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 0;
+  background: none;
+  box-shadow: none;
 }
 
-.login-page .login-title {
-    font-family: "Roboto-Bold", Helvetica;
-    font-size: 24px;
-    font-weight: 700;
-    color: #fff;
-    align-self: stretch;
-    margin-top: -1px;
+.login-title {
+  font-family: "Roboto-Bold", Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  text-align: left;
+  width: 100%;
 }
 
-.login-page .frame003 {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    flex: 0 0 auto;
-    align-self: stretch;
-    position: relative;
+.frame003 {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.login-page .login-input {
-    position: relative;
-    width: 100%;
-    margin-bottom: 20px;
+.login-input {
+  width: 330px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
 }
 
-.login-input.show-label {
-    margin-top: 16px;
+.input-label {
+  font-family: "Roboto-Bold", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  text-align: left;
+  padding: 4px 12px;
 }
 
 .input-wrapper {
-    position: relative;
-    width: 100%;
-    padding-top: 0;
-    transition: padding-top 0.3s ease;
-}
-
-.login-input.show-label .input-wrapper {
-    padding-top: 24px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .input {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: white;
-    outline: none;
-    transition: all 0.3s ease;
+  width: 100%;
+  padding: 12px;
+  padding-right: 80px;
+  background: rgba(255, 255, 255, 0.10);
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  color: #fff;
+  font-family: "Roboto-Regular", Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+  outline: none;
+  white-space: nowrap;
+  overflow-x: auto;
+  text-overflow: ellipsis;
 }
 
+.input:focus {
+  box-shadow: 0px 10px 24px rgba(136, 118, 217, 0.50);
+  outline: 1px solid rgba(136, 118, 217, 0.30);
+  outline-offset: -1px;
+}
+
+.input-error {
+  box-shadow: 0px 10px 24px rgba(179, 38, 30, 0.50);
+  outline: 1px solid rgba(239, 52, 52, 0.30);
+  outline-offset: -1px;
+}
+
+.input-label-error {
+  color: #FF0000;
+  font-size: 10px;
+  font-weight: 400;
+  padding: 4px 12px;
+}
 
 .floating-label {
-    position: absolute;
-    top: 4px;
-    left: 12px;
-    font-size: 13px;
-    font-weight: bold;
-    color: #fff;
-    opacity: 0;
-    transform: translateY(-5px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 1;
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  font-size: 16px;
+  color: #aaa;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  background-color: transparent;
 }
 
-.login-input.show-label .floating-label {
-    opacity: 1;
-    transform: translateY(0);
+.show-label .floating-label {
+  top: -10px;
+  left: 8px;
+  font-size: 12px;
+  color: #fff;
+  background-color: #2b2b2b;
+  padding: 0 4px;
 }
 
-.multiply,
-.img {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
+.icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
-.login-page .invalid-username-wrapper,
-.login-page .invalid-password-wrapper {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex: 0 0 auto;
-    padding: 4px 12px;
-    justify-content: center;
-    position: relative;
+.icon img {
+  display: block;
+  margin: auto;
 }
 
-.login-page .invalid-username,
-.login-page .invalid-password {
-    font-family: "Roboto-Regular", Helvetica;
-    font-size: 10px;
-    font-weight: 400;
-    white-space: nowrap;
-    width: fit-content;
+.clear {
+  right: 12px;
 }
 
-.login-page .invalid-username {
-    color: transparent;
+.toggle {
+  right: 12px;
 }
 
-.login-page .invalid-password {
-    color: var(--playdata-purple-light);
+.invalid-password-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.login-page .login-button {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-    flex: 0 0 auto;
-    align-self: stretch;
-    position: relative;
+.invalid-password {
+  font-size: 10px;
+  color: #8876D9;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  text-align: center;
+  width: 100%;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
 }
 
-.login-page .text-wrapper {
-    font-family: "Roboto-Regular", Helvetica;
-    font-size: 12px;
-    font-weight: 400;
-    color: #ffffff;
-    text-align: center;
-    line-height: 24px;
-    align-self: stretch;
-    position: relative;
+.login-button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.login-button button {
+  width: 330px;
+  padding: 14px 76px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  background: #8876D9;
+  transition: background 0.2s;
+}
+
+.login-button button:disabled {
+  color: #8F8F8F;
+  background: #DDDDDD;
+  cursor: not-allowed;
+}
+
+.login-button button:hover:not(:disabled) {
+  background: #504197;
+}
+
+.text-wrapper {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+  width: 100%;
+  margin: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.login-page .div001,
+.login-page .frame001,
+.frame002 {
+  position: relative;
+  z-index: 1;
+}
+
+.login-page .frame001,
+.frame002,
+.welcome-message {
+  flex-shrink: 0;
+  flex-grow: 0;
+  min-width: 0;
+  min-height: 0;
+}
+
+.find-idpw-button {
+  color: #8876D9 !important;
+  font-size: 10px;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  word-wrap: break-word;
+  align-self: stretch;
+  padding: 4px 12px;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  margin: 0;
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
 }

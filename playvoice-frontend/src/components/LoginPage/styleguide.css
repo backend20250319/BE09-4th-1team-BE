@@ -16,3 +16,46 @@
     --playdata-purple-light: rgba(136, 118, 217, 1);
     --white: rgba(255, 255, 255, 1);
 }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+}
+body {
+  background-image: url('/assets/images/login-bg.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.header {
+  position: fixed;
+  top: 32px;
+  left: 48px;
+  z-index: 1000;
+}
+.header img, .logo {
+  width: 120px;
+  height: auto;
+  min-width: 120px;
+  max-width: 120px;
+  transform: none !important;
+}
+
+.text-wrapper, .footer-copyright {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+}
+
+.login-page .overlap-group {
+  position: relative;
+  min-height: 100vh;
+}
