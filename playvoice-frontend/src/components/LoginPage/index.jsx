@@ -1,13 +1,18 @@
-import React from "react";
+'use client';
+import React, { useState } from "react";
 import { LoginButtons } from "./LoginButtons";
 import Image from "next/image";
-import playdata_logo from "@/assets/images/playdata-logo.svg";
 import advertisementImage from "@/assets/images/login-ad.png";
 import image from "@/assets/images/delete-icon.png";
 import multiply from "@/assets/images/delete-icon.png";
 import styles from "./style.module.css";
 
 export const LoginPage = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const showUsernameLabel = username !== '';
+    const showPasswordLabel = password !== '';
+
     return (
         <div className={styles["login-page"]}>
             <div className={styles["overlap-group"]}>
@@ -27,8 +32,9 @@ export const LoginPage = () => {
                                 className={styles["advertisement-image"]}
                                 alt="Advertisement image"
                                 src={advertisementImage}
-                                style={{ objectFit: "cover",
-                                         objectPosition: "top"
+                                style={{
+                                    objectFit: "cover",
+                                    objectPosition: "top"
                                 }}
                             />
 
@@ -38,11 +44,10 @@ export const LoginPage = () => {
                                     <br />
                                     Community Forum
                                 </div>
-
                                 <p className={styles["welcome-description"]}>
                                     A place where students and instructors come together to ask
                                     questions, share knowledge, and grow as developers. Whether
-                                    you&#39;re just starting out or guiding others, this is your
+                                    you're just starting out or guiding others, this is your
                                     space to connect and collaborate.
                                 </p>
                             </div>
@@ -51,51 +56,41 @@ export const LoginPage = () => {
                                 <div className={styles["login-title"]}>Login</div>
 
                                 <div className={styles["frame003"]}>
-                                    {/* 👤 ID 입력 */}
-                                    <div className={styles["login-input"]}>
+                                    {/* ID 입력 */}
+                                    <div className={`${styles["login-input"]} ${username ? styles["show-label"] : ""}`}>
+                                        <label htmlFor="username" className={styles["floating-label"]}>ID</label>
                                         <div className={styles["input-wrapper"]}>
                                             <input
                                                 type="text"
                                                 id="username"
-                                                required
-                                                className={styles["input"]}
+                                                value={username}
+                                                onChange={(e) => setUsername(e.target.value)}
+                                                placeholder="ID" // ← placeholder 제거
+                                                className={`${styles["input"]} ${username ? styles["filled"] : ""}`}
                                             />
-                                            <label htmlFor="username" className={styles["label"]}>
-                                                ID
-                                            </label>
-                                            <img
-                                                className={styles["multiply"]}
-                                                alt="Multiply"
-                                                src={multiply}
-                                            />
-                                        </div>
-                                        <div className={styles["invalid-username-wrapper"]}>
-                                            <div className={styles["invalid-username"]}>Invalid ID</div>
+                                            <label htmlFor="username" className={styles["floating-label"]}>ID</label>
                                         </div>
                                     </div>
 
-                                    {/* 🔒 Password 입력 */}
-                                    <div className={styles["login-input"]}>
+
+                                    {/* Password 입력 */}
+                                    <div className={`${styles["login-input"]} ${password ? styles["show-label"] : ''}`}>
                                         <div className={styles["input-wrapper"]}>
                                             <input
                                                 type="password"
                                                 id="password"
-                                                required
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                placeholder="Password"
                                                 className={styles["input"]}
                                             />
-                                            <label htmlFor="password" className={styles["label"]}>
+                                            <label htmlFor="password" className={styles["floating-label"]}>
                                                 Password
                                             </label>
-                                            <img
-                                                className={styles["img"]}
-                                                alt="Multiply"
-                                                src={image}
-                                            />
-                                        </div>
-                                        <div className={styles["invalid-username-wrapper"]}>
-                                            <div className={styles["invalid-username"]}>Invalid Password</div>
+                                            <img src={image} alt="clear" className={styles["img"]} />
                                         </div>
                                     </div>
+
                                 </div>
 
                                 <div className={styles["login-button"]}>
@@ -105,7 +100,6 @@ export const LoginPage = () => {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
                         <p className={styles["text-wrapper"]}>
