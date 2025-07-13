@@ -104,8 +104,8 @@ export const LoginPage = () => {
                       onClick={handleTogglePassword}
                       className={`${styles.icon} ${styles.toggle}`}
                     >
-                      <Image
-                        src={`/assets/images/${showPassword ? "eye-close" : "eye-open"}.png`}
+                      <img
+                        src="/assets/images/eye-open.png"
                         alt="Toggle password"
                         width={16}
                         height={16}
