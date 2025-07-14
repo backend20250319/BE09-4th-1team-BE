@@ -9,9 +9,10 @@ public record GetSuggestionPostResponseDto(Long id, Long userId, String title, S
                                            Long likeCount, Long unlikeCount, Long views,
                                            Long commentCount,
                                            LocalDateTime createdAt, LocalDateTime updatedAt,
-                                           boolean isAnswered) {
+                                           boolean isAnswered, String username) {
 
-    public static GetSuggestionPostResponseDto createDto(SuggestionPost suggestionPost) {
+    public static GetSuggestionPostResponseDto createDto(SuggestionPost suggestionPost,
+        String username) {
         return GetSuggestionPostResponseDto.builder()
             .id(suggestionPost.getId())
             .userId(suggestionPost.getUserId())
@@ -24,6 +25,7 @@ public record GetSuggestionPostResponseDto(Long id, Long userId, String title, S
             .createdAt(suggestionPost.getCreatedAt())
             .updatedAt(suggestionPost.getUpdatedAt())
             .isAnswered(suggestionPost.isAnswered())
+            .username(username)
             .build();
     }
 }
