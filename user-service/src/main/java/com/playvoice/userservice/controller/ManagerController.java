@@ -1,100 +1,82 @@
 package com.playvoice.userservice.controller;
 
 import com.playvoice.userservice.dto.CreateUserRequest;
-import com.playvoice.userservice.dto.ManagerCreateRequest;
-import com.playvoice.userservice.dto.ManagerUpdateRequest;
-import com.playvoice.userservice.dto.ManagerStatisticsDto;
-import com.playvoice.userservice.entity.AuditAction;
+import com.playvoice.userservice.dto.ResetPasswordRequest;
+import com.playvoice.userservice.entity.PasswordStatus;
 import com.playvoice.userservice.entity.User;
-import com.playvoice.userservice.repository.AccountAuditLogRepository;
-import com.playvoice.userservice.service.AccountAuditLogService;
+import com.playvoice.userservice.repository.UserRepository;
 import com.playvoice.userservice.service.UserService;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/managers")
+@RequestMapping("/manager")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('MANAGER')")
 public class ManagerController {
-    private final UserService userService;
-    private final AccountAuditLogService auditLogService;
-    private final AccountAuditLogRepository auditLogRepository;
 
-    @PostMapping
-    public ResponseEntity<User> createManager(@RequestBody ManagerCreateRequest req, @AuthenticationPrincipal String managerId) {
-        User manager = userService.createManager(req);
-        auditLogService.log(manager.getId(), Long.valueOf(managerId), AuditAction.CREATE_MANAGER);
-        return ResponseEntity.ok(manager);
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
+
+    @GetMapping("/students")
+    public ResponseEntity<List<User>> getAllStudents() {
+        List<User> students = userRepository.findAll()
+            .stream()
+            .filter(user -> user.getRole().name().equals("STUDENT"))
+            .toList();
+
+        return ResponseEntity.ok(students);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetStudentPassword(@RequestBody ResetPasswordRequest request) {
+        User user = userRepository.findByUsername(request.getUsername())
+            .orElseThrow(() -> new RuntimeException("Student Not Found"));
+
+        if (!user.getRole().name().equals("STUDENT")) {
+            return ResponseEntity.badRequest().body("Only students can be reset");
+        }
+
+        String tempPassword = UUID.randomUUID().toString().substring(0, 10);
+        user.changePassword(passwordEncoder.encode(tempPassword));
+        user.setPasswordStatus(PasswordStatus.INIT);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Password has been reset and sent to email.");
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody CreateUserRequest request, @AuthenticationPrincipal String managerId) {
+    public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request) {
         User user = userService.createUser(request);
-        auditLogService.log(user.getId(), Long.valueOf(managerId), AuditAction.CREATE_USER);
         return ResponseEntity.ok(user);
     }
 
-    @PatchMapping("/users/{id}/ban")
-    public ResponseEntity<Void> banUser(@PathVariable Long id, @AuthenticationPrincipal String managerId) {
+    @PostMapping("/students/{id}/ban")
+    public ResponseEntity<Void> banStudent(@PathVariable Long id) {
         userService.banStudent(id);
-        auditLogService.log(id, Long.valueOf(managerId), AuditAction.BAN_USER);
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/users/{id}/unban")
-    public ResponseEntity<Void> unbanUser(@PathVariable Long id, @AuthenticationPrincipal String managerId) {
+    @PostMapping("/students/{id}/unban")
+    public ResponseEntity<Void> unbanStudent(@PathVariable Long id) {
         userService.unbanStudent(id);
-        auditLogService.log(id, Long.valueOf(managerId), AuditAction.UNBAN_USER);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/users/{id}/reset-password")
-    public ResponseEntity<Void> resetUserPassword(@PathVariable Long id, @AuthenticationPrincipal String managerId) {
+    @PostMapping("/students/{id}/reset-password")
+    public ResponseEntity<Void> resetStudentPassword(@PathVariable Long id) {
         userService.resetStudentPassword(id);
-        auditLogService.log(id, Long.valueOf(managerId), AuditAction.PASSWORD_RESET);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<List<User>> getManagers(@RequestParam Map<String, String> params) {
-        return ResponseEntity.ok(userService.getManagers(params));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getManager(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getManager(id));
-    }
-
-    @GetMapping("/statistics/{managerId}")
-    public ResponseEntity<ManagerStatisticsDto> getManagerStatistics(@PathVariable Long managerId) {
-        // managerId로 username 조회
-        User manager = userService.getManager(managerId);
-        var logs = auditLogRepository.findByPerformedBy(managerId);
-        long createdUserCount = logs.stream().filter(l -> l.getAction().equals("CREATE_USER")).count();
-        long bannedUserCount = logs.stream().filter(l -> l.getAction().equals("BAN_USER")).count();
-        long passwordResetCount = logs.stream().filter(l -> l.getAction().equals("PASSWORD_RESET")).count();
-        var lastActivityAt = logs.stream().map(l -> l.getTimestamp()).max(java.time.LocalDateTime::compareTo).orElse(null);
-        return ResponseEntity.ok(ManagerStatisticsDto.builder()
-            .managerId(managerId)
-            .username(manager.getUsername())
-            .createdUserCount(createdUserCount)
-            .bannedUserCount(bannedUserCount)
-            .passwordResetCount(passwordResetCount)
-            .lastActivityAt(lastActivityAt)
-            .build());
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateManager(@PathVariable Long id, @RequestBody ManagerUpdateRequest req, @AuthenticationPrincipal String managerId) {
-        User updated = userService.updateManager(id, req);
-        auditLogService.log(id, Long.valueOf(managerId), AuditAction.UPDATE_MANAGER);
-        return ResponseEntity.ok(updated);
     }
 }

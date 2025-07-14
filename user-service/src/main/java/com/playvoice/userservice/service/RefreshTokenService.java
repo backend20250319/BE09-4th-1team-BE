@@ -1,36 +1,38 @@
 package com.playvoice.userservice.service;
 
+import com.playvoice.userservice.entity.RefreshToken;
+import com.playvoice.userservice.repository.RefreshTokenRepository;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenService {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RefreshTokenRepository refreshTokenRepository;
 
+    //TODO
     public void save(String username, String token) {
-        redisTemplate.opsForValue().set("refresh:" + username, token, Duration.ofHours(1));
+        Date now = new Date();
+        refreshTokenRepository.save(
+            new RefreshToken(username, token, new Date(now.getTime() + 15 * 60 * 1000)));
     }
 
     public void delete(String username) {
-        redisTemplate.delete("refresh:" + username);
+        refreshTokenRepository.deleteById(username);
     }
 
     public boolean isValid(String username, String token) {
-        String stored = redisTemplate.opsForValue().get("refresh:" + username);
-        return token.equals(stored);
+        RefreshToken refreshToken = refreshTokenRepository.findById(username)
+            .orElseThrow(() -> new IllegalArgumentException("invalid token"));
+
+        if (refreshToken.getToken().equals(token)) {
+            return true;
+        }
+
+        return false;
     }
-
-    public void extend(String username) {
-        redisTemplate.expire("refresh:" + username, Duration.ofHours(1));
-    }
-
-
-
 
 
 }

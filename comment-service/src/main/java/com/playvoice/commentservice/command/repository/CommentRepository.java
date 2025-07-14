@@ -11,6 +11,4 @@ import org.springframework.stereotype.Repository;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Page<Comment> findByPostId(Long postId, Pageable pageable);
-
-    Long countByPostId(Long postId);
 }

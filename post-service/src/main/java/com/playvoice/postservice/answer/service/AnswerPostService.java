@@ -48,6 +48,12 @@ public class AnswerPostService {
         return GetAnswerPostResponseDto.createDto(answerPost);
     }
 
+    @Transactional(readOnly = true)
+    public GetAnswerPostResponseDto getAnswerPostBySuggestionPostId(Long suggestionPostId) {
+        AnswerPost answerPost = answerPostRepository.findBySuggestionPostId(suggestionPostId);
+        return GetAnswerPostResponseDto.createDto(answerPost);
+    }
+
     @Transactional
     public void deleteAnswerPost(Long id) {
         //TODO userId 체크

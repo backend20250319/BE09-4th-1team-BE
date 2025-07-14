@@ -44,6 +44,12 @@ public class AnswerPostController {
         return ResponseEntity.ok(ApiResponse.success(dto));
     }
 
+    @GetMapping("/by-suggestion/{suggestionPostId}")
+    public ResponseEntity<ApiResponse<GetAnswerPostResponseDto>> getAnswerPostBySuggestionPostId(@PathVariable Long suggestionPostId) {
+        GetAnswerPostResponseDto dto = answerPostService.getAnswerPostBySuggestionPostId(suggestionPostId);
+        return ResponseEntity.ok(ApiResponse.success(dto));
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<ApiResponse<Long>> updateAnswerPost(@PathVariable Long id,
         @Valid @RequestBody UpdateAnswerPostRequestDto dto) {
