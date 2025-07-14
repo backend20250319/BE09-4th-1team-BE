@@ -5,7 +5,7 @@ spring:
   profiles:
     active: dev
   application:
-    name: PLAYVOICE-GATEWAY-SERVICE
+    name: gateway-service
   cloud:
     gateway:
       globalcors:
@@ -28,7 +28,7 @@ spring:
           predicates:
             - Path=/api/v1/user-service/**
           filters:
-            - RewritePath=/api/v1/user-service/(?<segment>.*), /api/${segment}
+            - RewritePath=/api/v1/user-service/(?<segment>.*), /${segment}
 
         - id: post-service
           uri: lb://POST-SERVICE
@@ -49,7 +49,7 @@ spring:
           predicates:
             - Path=/api/v1/consulting-service/**
           filters:
-            - RewritePath=/api/v1/consulting-service/(?<segment>.*), /${segment}
+            - RewritePath=/api/v1/consulting-service/(?<segment>.*), /$\{segment}
 
 springdoc:
   swagger-ui:

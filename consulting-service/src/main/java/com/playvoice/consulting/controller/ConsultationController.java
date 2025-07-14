@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/consultation")
+@RequestMapping("/consulting")
 @RequiredArgsConstructor
 @Slf4j
 public class ConsultationController {

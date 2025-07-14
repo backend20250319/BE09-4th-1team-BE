@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,11 +11,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -31,9 +25,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         System.out.println("security filter chain  >>>>>> ");
 
-        http
-//                .cors(Customizer.withDefaults()) // ✅ CORS 활성화
-                .csrf(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session
                         -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(exception ->
@@ -43,13 +35,12 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth ->
                                 auth
-                                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
-                                        .permitAll()
+//                                .requestMatchers(HttpMethod.GET, "/get-test", "/**")
+//                                .permitAll()
+                                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                                         .requestMatchers("/comments/**")
-//                                        .hasAnyAuthority("STUDENT", "MANAGER")
-                                        .permitAll()
-                                        .requestMatchers(HttpMethod.PATCH, "/comments/*/reaction").permitAll()
+                                        .hasAnyAuthority("STUDENT", "MANAGER")
+//                                        .permitAll()
                                         .anyRequest()
                                         .authenticated()
                 )
@@ -65,19 +56,4 @@ public class SecurityConfig {
         return new HeaderAuthenticationFilter();
     }
 
-    // ✅ CORS 설정 빈 등록
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-
-        config.setAllowedOrigins(List.of("http://localhost:3000")); // 프론트엔드 개발 주소
-        config.setAllowedMethods(List.of("GET", "POST", "PATCH", "DELETE", "OPTIONS")); // 허용할 HTTP 메서드
-        config.setAllowedHeaders(List.of("*")); // 모든 헤더 허용
-        config.setAllowCredentials(true); // 인증 정보 허용 (Authorization 헤더 등)
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config); // 전체 경로에 대해 적용
-
-        return source;
-    }
 }
