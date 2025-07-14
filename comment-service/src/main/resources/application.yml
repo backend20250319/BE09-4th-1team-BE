@@ -1,5 +1,5 @@
 springdoc:
-  packages-to-scan: com.ohgiraffers.reservationservice
+  packages-to-scan: com.playvoice.postservice
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
 server:
@@ -19,6 +19,5 @@ eureka:
 spring:
   profiles:
     active: dev
-
   application:
     name: comment-service
