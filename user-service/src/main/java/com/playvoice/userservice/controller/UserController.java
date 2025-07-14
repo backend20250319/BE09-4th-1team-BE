@@ -140,6 +140,14 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getMyProfile(@AuthenticationPrincipal String userId) {
+        Long id = Long.valueOf(userId);
+        UserResponseDTO userInfo = userService.findById(id);
+        return ResponseEntity.ok(userInfo);
+    }
+
+
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteAccount(@RequestBody DeleteAccountRequest request,
         @AuthenticationPrincipal String userId) {
