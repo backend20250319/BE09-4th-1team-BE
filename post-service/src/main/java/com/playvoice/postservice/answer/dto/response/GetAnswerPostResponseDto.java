@@ -10,10 +10,11 @@ public record GetAnswerPostResponseDto(
     Long likeCount, Long unlikeCount, Long views,
     Long commentCount,
     LocalDateTime createdAt, LocalDateTime updatedAt,
-    Long suggestionPostId
+    Long suggestionPostId,
+    String username
 ) {
 
-    public static GetAnswerPostResponseDto createDto(AnswerPost answerPost) {
+    public static GetAnswerPostResponseDto createDto(AnswerPost answerPost, String username) {
         return GetAnswerPostResponseDto.builder()
             .id(answerPost.getId())
             .userId(answerPost.getUserId())
@@ -26,6 +27,7 @@ public record GetAnswerPostResponseDto(
             .createdAt(answerPost.getCreatedAt())
             .updatedAt(answerPost.getUpdatedAt())
             .suggestionPostId(answerPost.getSuggestionPostId())
+            .username(username)
             .build();
     }
 }

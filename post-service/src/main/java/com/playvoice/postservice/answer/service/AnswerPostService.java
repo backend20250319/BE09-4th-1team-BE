@@ -6,6 +6,7 @@ import com.playvoice.postservice.answer.dto.request.LikeAnswerPostRequestDto;
 import com.playvoice.postservice.answer.dto.request.UpdateAnswerPostRequestDto;
 import com.playvoice.postservice.answer.dto.response.GetAnswerPostResponseDto;
 import com.playvoice.postservice.answer.repository.AnswerPostRepository;
+import com.playvoice.postservice.fegin.UserServiceClient;
 import com.playvoice.postservice.suggestion.domain.SuggestionPost;
 import com.playvoice.postservice.suggestion.dto.request.CommentCountRequestDto;
 import com.playvoice.postservice.suggestion.repository.SuggestionPostRepository;
@@ -19,6 +20,7 @@ public class AnswerPostService {
 
     private final AnswerPostRepository answerPostRepository;
     private final SuggestionPostRepository suggestionPostRepository;
+    private final UserServiceClient userServiceClient;
 
 
     @Transactional
@@ -45,13 +47,16 @@ public class AnswerPostService {
         AnswerPost answerPost = answerPostRepository.findById(id);
         answerPost.increaseView();
         answerPostRepository.save(answerPost);
-        return GetAnswerPostResponseDto.createDto(answerPost);
+        String username = userServiceClient.getUserById(answerPost.getUserId()).name();
+
+        return GetAnswerPostResponseDto.createDto(answerPost, username);
     }
 
     @Transactional(readOnly = true)
     public GetAnswerPostResponseDto getAnswerPostBySuggestionPostId(Long suggestionPostId) {
         AnswerPost answerPost = answerPostRepository.findBySuggestionPostId(suggestionPostId);
-        return GetAnswerPostResponseDto.createDto(answerPost);
+        String username = userServiceClient.getUserById(answerPost.getUserId()).username();
+        return GetAnswerPostResponseDto.createDto(answerPost, username);
     }
 
     @Transactional

@@ -1,5 +1,7 @@
 package com.playvoice.postservice.suggestion.service;
 
+import com.playvoice.postservice.fegin.UserServiceClient;
+import com.playvoice.postservice.fegin.dto.UserResponseDTO;
 import com.playvoice.postservice.suggestion.domain.SuggestionPost;
 import com.playvoice.postservice.suggestion.dto.request.CommentCountRequestDto;
 import com.playvoice.postservice.suggestion.dto.request.CreateSuggestionPostRequestDto;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class SuggestionPostService {
 
     private final SuggestionPostRepository suggestionPostRepository;
+    private final UserServiceClient userServiceClient;
 
     @Transactional
     public Long createSuggestionPost(CreateSuggestionPostRequestDto requestDto) {
@@ -25,7 +28,6 @@ public class SuggestionPostService {
             requestDto.userId(), requestDto.title(), requestDto.content());
 
         // TODO 해당 유저가 있어야 생성 가능하고 인증 정보가 유저랑 같아야함
-
         suggestionPost = suggestionPostRepository.save(suggestionPost);
 
         return suggestionPost.getId();
@@ -35,9 +37,10 @@ public class SuggestionPostService {
     public GetSuggestionPostResponseDto getSuggestionPost(Long id) {
         SuggestionPost suggestionPost = suggestionPostRepository.findById(id);
         suggestionPost.increaseView();
+        UserResponseDTO userResponseDTO = userServiceClient.getUserById(suggestionPost.getUserId());
         suggestionPost = suggestionPostRepository.save(suggestionPost);
 
-        return GetSuggestionPostResponseDto.createDto(suggestionPost);
+        return GetSuggestionPostResponseDto.createDto(suggestionPost, userResponseDTO.name());
     }
 
     @Transactional
@@ -105,6 +108,10 @@ public class SuggestionPostService {
 
     public Page<GetSuggestionPostResponseDto> getAllSuggestions(Pageable pageable) {
         return suggestionPostRepository.findAll(pageable)
-            .map(GetSuggestionPostResponseDto::createDto);
+            .map((suggestionPost -> {
+                String username = userServiceClient.getUserById(suggestionPost.getUserId())
+                    .name();
+                return GetSuggestionPostResponseDto.createDto(suggestionPost, username);
+            }));
     }
 }
