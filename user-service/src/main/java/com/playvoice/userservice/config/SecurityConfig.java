@@ -1,7 +1,6 @@
 package com.playvoice.userservice.config;
 
 import com.playvoice.userservice.jwt.HeaderAuthenticationFilter;
-import com.playvoice.userservice.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter; // ✅ 필터 주입
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -43,7 +41,6 @@ public class SecurityConfig {
                 ).permitAll()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(headerAuthenticationFilter(),
                 UsernamePasswordAuthenticationFilter.class);
 
