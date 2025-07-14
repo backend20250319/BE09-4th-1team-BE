@@ -1,8 +1,8 @@
-package com.playvoice.commentservice.security;
+package com.playvoice.consulting.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.playvoice.commentservice.common.ApiResponse;
-import com.playvoice.commentservice.exception.ErrorCode;
+import com.playvoice.consulting.common.ApiResponse;
+import com.playvoice.consulting.exception.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

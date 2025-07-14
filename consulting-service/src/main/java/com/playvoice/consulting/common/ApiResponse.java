@@ -1,4 +1,4 @@
-package com.playvoice.commentservice.common;
+package com.playvoice.consulting.common;
 
 import lombok.Builder;
 import lombok.Getter;

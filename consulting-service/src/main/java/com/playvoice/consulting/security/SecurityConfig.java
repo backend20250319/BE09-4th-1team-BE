@@ -1,9 +1,8 @@
-package com.playvoice.commentservice.security;
+package com.playvoice.consulting.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,9 +37,9 @@ public class SecurityConfig {
 //                                .requestMatchers(HttpMethod.GET, "/get-test", "/**")
 //                                .permitAll()
                                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                                        .requestMatchers("/comments/**")
-                                        .hasAnyAuthority("STUDENT", "MANAGER")
-//                                        .permitAll()
+                                        .requestMatchers("/consulting/**")
+                                       // .hasAnyAuthority("STUDENT", "MANAGER")
+                                        .permitAll()
                                         .anyRequest()
                                         .authenticated()
                 )

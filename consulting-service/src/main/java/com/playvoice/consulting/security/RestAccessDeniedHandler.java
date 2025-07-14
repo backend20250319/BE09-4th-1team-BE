@@ -1,4 +1,4 @@
-package com.playvoice.commentservice.security;
+package com.playvoice.consulting.security;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
