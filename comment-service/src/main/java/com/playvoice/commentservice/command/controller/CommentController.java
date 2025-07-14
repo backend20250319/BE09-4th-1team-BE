@@ -37,11 +37,8 @@ public class CommentController {
             summary = "댓글 생성", description = "댓글을 생성합니다.", security = @SecurityRequirement(name = "Authorization"))
     @PostMapping
     public ResponseEntity<ApiResponse<CommentDTO>> createComment(
-//            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal String userId,
             @Valid @RequestBody CommentCreateRequest req) {
-        String userId = "1";
-
-        System.out.println("userId = " + userId);
 
         CommentDTO commentDTO = commentService.createComment(req, Long.valueOf(userId));
 
@@ -61,12 +58,10 @@ public class CommentController {
             summary = "댓글 조회", description = "댓글을 조회합니다.", security = @SecurityRequirement(name = "Authorization"))
     @GetMapping("/posts/{postId}")
     public ResponseEntity<ApiResponse<Page<CommentDTO>>> getComments(
-//            @AuthenticationPrincipal String userId,
+            @AuthenticationPrincipal String userId,
             @PathVariable Long postId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "3") int size) {
-
-        String userId = "1";
 
         Page<CommentDTO> commentDTOList = commentService.getComments(userId, postId, page, size);
 
@@ -85,12 +80,10 @@ public class CommentController {
             summary = "댓글 수정", description = "댓글을 수정합니다.", security = @SecurityRequirement(name = "Authorization"))
     @PatchMapping("/{commentId}")
     public ResponseEntity<ApiResponse<CommentDTO>> updateComment(
+            @AuthenticationPrincipal String userId,
             @PathVariable Long commentId,
             @Valid @RequestBody CommentUpdateRequest req
-//        , @AuthenticationPrincipal String userId
     ) {
-        String userId = "1";
-
         CommentDTO commentDTO = commentService.updateComment(req, commentId, Long.valueOf(userId));
 
         return ResponseEntity
@@ -109,10 +102,9 @@ public class CommentController {
             security = @SecurityRequirement(name = "Authorization"))
     @DeleteMapping("/{commentId}")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
+            @AuthenticationPrincipal String userId,
             @PathVariable Long commentId
-//        , @AuthenticationPrincipal String userId
     ) {
-        String userId = "1";
 
         commentService.deleteComment(commentId, Long.valueOf(userId));
 
@@ -133,12 +125,10 @@ public class CommentController {
             security = @SecurityRequirement(name = "Authorization"))
     @PatchMapping("/{commentId}/reaction")
     public ResponseEntity<ApiResponse<CommentDTO>> updateReaction(
+            @AuthenticationPrincipal String userId,
             @PathVariable Long commentId,
             @RequestParam("type") ReactionStatus reactionStatus
-//        , @AuthenticationPrincipal String userId
     ) {
-        String userId = "1";
-
         CommentDTO commentDTO = commentService.updateReaction(commentId, Long.parseLong(userId), reactionStatus);
 
         return ResponseEntity
@@ -157,6 +147,7 @@ public class CommentController {
             security = @SecurityRequirement(name = "Authorization"))
     @GetMapping("/posts/{postId}/count")
     public ResponseEntity<ApiResponse<CommentCountDTO>> getCommentCount(
+            @AuthenticationPrincipal String userId,
             @PathVariable Long postId
     ) {
 
