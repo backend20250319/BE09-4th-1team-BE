@@ -116,6 +116,7 @@ public class UserService {
             .createdAt(LocalDateTime.now())
             .lastChangedPassword(LocalDateTime.now())
             .lastLogin(LocalDateTime.now())
+            .name(request.getName())
             .build();
         return userRepository.save(user);
     }
