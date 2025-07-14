@@ -1,0 +1,61 @@
+:root {
+    --black: rgba(0, 0, 0, 1);
+    --coral: rgba(239, 52, 52, 1);
+    --coraldark: rgba(224, 48, 48, 1);
+    --dropshadow: 0px 10px 24px 0px rgba(0, 0, 0, 0.22);
+    --gray-1a: rgba(26, 26, 26, 1);
+    --gray-33: rgba(51, 51, 51, 1);
+    --gray-55: rgba(85, 85, 85, 1);
+    --gray-75: rgba(117, 117, 117, 1);
+    --gray-8f: rgba(143, 143, 143, 1);
+    --graya-2: rgba(162, 162, 162, 1);
+    --grayaaa: rgba(170, 170, 170, 1);
+    --grayddd: rgba(221, 221, 221, 1);
+    --playdata-gray: rgba(63, 185, 175, 1);
+    --playdata-purple: rgba(80, 65, 151, 1);
+    --playdata-purple-light: rgba(136, 118, 217, 1);
+    --white: rgba(255, 255, 255, 1);
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+}
+body {
+  background-image: url('/assets/images/login-bg.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.header {
+  position: fixed;
+  top: 32px;
+  left: 48px;
+  z-index: 1000;
+}
+.header img, .logo {
+  width: 120px;
+  height: auto;
+  min-width: 120px;
+  max-width: 120px;
+  transform: none !important;
+}
+
+.text-wrapper, .footer-copyright {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  height: 40px;
+  text-align: center;
+  font-size: 14px;
+  margin: 0;
+}
+
+.login-page .overlap-group {
+  position: relative;
+  min-height: 100vh;
+}

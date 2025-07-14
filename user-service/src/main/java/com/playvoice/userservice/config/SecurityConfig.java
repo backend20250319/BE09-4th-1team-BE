@@ -33,7 +33,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.PUT,
+                        .requestMatchers(HttpMethod.POST,
                                 "/api/auth/login",
                                 "/api/auth/refresh",
                                 "/api/auth/logout",

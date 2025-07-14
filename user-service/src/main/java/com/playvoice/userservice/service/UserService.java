@@ -1,12 +1,16 @@
 package com.playvoice.userservice.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.playvoice.userservice.dto.ChangePasswordRequest;
 import com.playvoice.userservice.dto.CreateUserRequest;
+import com.playvoice.userservice.dto.ManagerCreateRequest;
+import com.playvoice.userservice.dto.ManagerUpdateRequest;
 import com.playvoice.userservice.entity.PasswordStatus;
 import com.playvoice.userservice.entity.User;
 import com.playvoice.userservice.entity.UserRole;
@@ -119,6 +123,69 @@ public class UserService {
                 .lastLogin(LocalDateTime.now())
                 .build();
         return userRepository.save(user);
+    }
+
+    public User createManager(ManagerCreateRequest req) {
+        if (userRepository.existsByUsername(req.getUsername())) {
+            throw new IllegalArgumentException("이미 사용 중인 username입니다.");
+        }
+        if (userRepository.findAll().stream().anyMatch(u -> u.getEmail().equals(req.getEmail()))) {
+            throw new IllegalArgumentException("이미 사용 중인 email입니다.");
+        }
+        // 비밀번호 강도 체크 등 추가 가능
+        User manager = User.builder()
+            .email(req.getEmail())
+            .username(req.getUsername())
+            .password(passwordEncoder.encode(req.getPassword()))
+            .role(UserRole.MANAGER)
+            .course(req.getCourse())
+            .isBanned(false)
+            .passwordStatus(PasswordStatus.INIT)
+            .createdAt(LocalDateTime.now())
+            .lastChangedPassword(LocalDateTime.now())
+            .lastLogin(LocalDateTime.now())
+            .build();
+        return userRepository.save(manager);
+    }
+
+    public List<User> getManagers(Map<String, String> params) {
+        // 간단 필터링: 추후 Specification/QueryDSL로 확장 가능
+        return userRepository.findAll().stream()
+            .filter(u -> u.getRole() == UserRole.MANAGER)
+            .toList();
+    }
+
+    public User getManager(Long id) {
+        User user = userRepository.findById(id).orElseThrow();
+        if (user.getRole() != UserRole.MANAGER) throw new IllegalArgumentException("매니저가 아닙니다.");
+        return user;
+    }
+
+    public User updateManager(Long id, ManagerUpdateRequest req) {
+        User user = getManager(id);
+        user.changeEmail(req.getEmail());
+        user.changeName(req.getName());
+        user.changeCourse(req.getCourse());
+        return userRepository.save(user);
+    }
+
+    public List<User> getUsers(String course, Boolean isBanned, String createdAfter) {
+        return userRepository.findAll().stream()
+            .filter(u -> course == null || u.getCourse().equalsIgnoreCase(course))
+            .filter(u -> isBanned == null || u.getIsBanned().equals(isBanned))
+            .filter(u -> {
+                if (createdAfter == null) return true;
+                try {
+                    return u.getCreatedAt().isAfter(LocalDateTime.parse(createdAfter));
+                } catch (Exception e) {
+                    return true; // 파싱 실패 시 필터링 무시
+                }
+            })
+            .toList();
+    }
+
+    public User getUser(Long id) {
+        return userRepository.findById(id).orElseThrow();
     }
 
     private String generateTempPassword() {

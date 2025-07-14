@@ -76,6 +76,10 @@ public class User {
         this.name = newName;
     }
 
+    public void changeCourse(String newCourse) {
+        this.course = newCourse;
+    }
+
     public void setPasswordStatus(PasswordStatus passwordStatus) {
         this.passwordStatus = passwordStatus;
     }

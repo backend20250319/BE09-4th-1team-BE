@@ -12,11 +12,19 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.playvoice.userservice.dto.ChangeEmailRequest;
 import com.playvoice.userservice.dto.ChangeNameRequest;
 import com.playvoice.userservice.dto.ChangePasswordRequest;
 import com.playvoice.userservice.dto.DeleteAccountRequest;
+import com.playvoice.userservice.dto.UserSimpleInfoDto;
 import com.playvoice.userservice.entity.User;
 import com.playvoice.userservice.repository.UserRepository;
 import com.playvoice.userservice.service.UserService;
@@ -103,6 +111,10 @@ public class UserController {
                                            Principal principal) {
         String username = principal.getName();
 
+        if ("manager1".equals(username)) {
+            return ResponseEntity.badRequest().body("manager1 계정은 탈퇴할 수 없습니다.");
+        }
+
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User Not Found"));
 
@@ -135,8 +147,42 @@ public class UserController {
 
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteAccount(@RequestBody DeleteAccountRequest request, @AuthenticationPrincipal String userId) {
+        User user = userRepository.findById(Long.valueOf(userId)).orElseThrow();
+        if ("manager1".equals(user.getUsername())) {
+            throw new IllegalArgumentException("manager1 계정은 탈퇴할 수 없습니다.");
+        }
         userService.deleteAccount(Long.valueOf(userId), request.getPassword());
         return ResponseEntity.ok().build();
+    }
+
+    // 유저 정보 단건 조회
+    @GetMapping("/info")
+    public ResponseEntity<UserSimpleInfoDto> getUserInfo(@RequestParam Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User Not Found"));
+        return ResponseEntity.ok(new UserSimpleInfoDto(user));
+    }
+
+    // 유저 정보 리스트 조회
+    @GetMapping("/info/list")
+    public ResponseEntity<List<UserSimpleInfoDto>> getUserInfoList(@RequestParam List<Long> userIds) {
+        List<User> users = userRepository.findAllById(userIds);
+        List<UserSimpleInfoDto> result = users.stream().map(UserSimpleInfoDto::new).collect(Collectors.toList());
+        return ResponseEntity.ok(result);
+    }
+
+    // 유저 목록 필터링 조회
+    @GetMapping("")
+    public ResponseEntity<List<User>> getUsers(@RequestParam(required = false) String course,
+                                               @RequestParam(required = false) Boolean isBanned,
+                                               @RequestParam(required = false) String createdAfter) {
+        return ResponseEntity.ok(userService.getUsers(course, isBanned, createdAfter));
+    }
+
+    // 유저 단건 RESTful 조회
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUser(id));
     }
 
 }
