@@ -35,20 +35,20 @@ public class GatewayJwtTokenProvider {
 
     public Long getUserIdFromJWT(String token) {
         Claims claims = Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+            .verifyWith(secretKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
 
         return claims.get("userId", Long.class);
     }
 
     public String getRoleFromJWT(String token) {
         Claims claims = Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+            .verifyWith(secretKey)
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
         return claims.get("role", String.class);
     }
 
