@@ -21,4 +21,6 @@ public interface AnswerPostRepository {
     void deleteLike(AnswerPost answerPost, Long userId);
 
     void deleteUnlike(AnswerPost answerPost, Long userId);
+
+    AnswerPost findBySuggestionPostId(Long suggestionPostId);
 }

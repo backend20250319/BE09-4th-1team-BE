@@ -71,4 +71,11 @@ public class AnswerPostRepositoryImpl implements AnswerPostRepository {
         UnlikeEntity entity = new UnlikeEntity(answerPost, userId);
         jpaUnlikeRepository.deleteById(entity.getId());
     }
+
+    @Override
+    public AnswerPost findBySuggestionPostId(Long suggestionPostId) {
+        AnswerPostEntity entity = jpaAnswerPostRepository.findBySuggestionPostId(suggestionPostId)
+            .orElseThrow(() -> new NoSuchElementException("답변 게시물을 찾지 못했습니다."));
+        return entity.toAnswerPost();
+    }
 }
