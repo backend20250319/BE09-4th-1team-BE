@@ -163,4 +163,13 @@ public class UserController {
             dto
         );
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getUser(@AuthenticationPrincipal String userId) {
+        UserResponseDTO dto = userService.findById(Long.valueOf(userId));
+
+        return ResponseEntity.ok(
+            dto
+        );
+    }
 }

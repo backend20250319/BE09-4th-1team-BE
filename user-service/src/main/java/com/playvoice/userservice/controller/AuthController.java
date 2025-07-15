@@ -49,7 +49,7 @@ public class AuthController {
         return ResponseEntity.ok()
             .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
             .body(new LoginResponse(accessToken, user.getUsername(), user.getRole(),
-                user.getPasswordStatus()));
+                user.getPasswordStatus(), user.getCourse()));
     }
 
     @PostMapping("/refresh")
@@ -75,7 +75,7 @@ public class AuthController {
         return ResponseEntity.ok()
             .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
             .body(new LoginResponse(newAccessToken, user.getUsername(), user.getRole(),
-                user.getPasswordStatus()));
+                user.getPasswordStatus(), user.getCourse()));
     }
 
     @PostMapping("/logout")
