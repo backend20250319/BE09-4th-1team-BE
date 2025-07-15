@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -20,14 +22,31 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     private final GatewayJwtTokenProvider gatewayJwtTokenProvider;
 
+    // 인증이 필요하지 않은 경로들
+    private static final List<String> EXCLUDED_PATHS = Arrays.asList(
+        "/auth/login",
+        "/auth/signup", 
+        "/auth/refresh",
+        "/health",
+        "/actuator/health"
+    );
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        String path = exchange.getRequest().getPath().value();
+        
+        // 인증이 필요하지 않은 경로는 필터를 건너뜀
+        if (isExcludedPath(path)) {
+            log.info("Excluded path from JWT filter: {}", path);
+            return chain.filter(exchange);
+        }
 
         String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            log.info("no access Token");
-            return chain.filter(exchange);
+            log.info("no access Token for path: {}", path);
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            return exchange.getResponse().setComplete();
         }
 
         String token = authHeader.substring(7);
@@ -51,6 +70,10 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
         ServerWebExchange mutatedExchange = exchange.mutate().request(mutateRequest).build();
 
         return chain.filter(mutatedExchange);
+    }
+
+    private boolean isExcludedPath(String path) {
+        return EXCLUDED_PATHS.stream().anyMatch(path::endsWith);
     }
 
     @Override
