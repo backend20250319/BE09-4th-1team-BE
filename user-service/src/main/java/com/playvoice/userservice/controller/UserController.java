@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
+
+// 매니저 간단 정보 DTO
+record ManagerSimpleDTO(Long id, String name, String profileImageUrl) {}
 
 @Slf4j
 @RestController
@@ -149,6 +154,14 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         UserResponseDTO dto = userService.findById(id);
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/managers")
+    public ResponseEntity<List<ManagerSimpleDTO>> getAllManagers() {
+        List<ManagerSimpleDTO> managers = userService.findAllManagers().stream()
+            .map(m -> new ManagerSimpleDTO(m.id(), m.name(), m.profileImageUrl()))
+            .collect(Collectors.toList());
+        return ResponseEntity.ok(managers);
     }
 
     @PostMapping("/me/img")
