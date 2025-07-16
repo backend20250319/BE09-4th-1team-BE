@@ -66,7 +66,7 @@ public class ConsultationService {
         }
 
         ConsultationSession session = sessionOptional.get();
-        session.setStatus(Status.Canceled);
+        session.setStatus(Status.Cancelled);
         session.setCancelTime(LocalDateTime.now());
 
         consultationRepository.save(session);
