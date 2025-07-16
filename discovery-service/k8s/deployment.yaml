@@ -15,5 +15,6 @@ spec:
       containers:
         - name: discovery
           image: discovery-service:latest
+          imagePullPolicy: Never  # 🔥 이 줄 추가!
           ports:
             - containerPort: 8761
