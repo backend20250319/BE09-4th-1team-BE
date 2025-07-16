@@ -1,5 +1,5 @@
 springdoc:
-  packages-to-scan: com.playvoice.postservice
+  packages-to-scan: com.playvoice.commentservice
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
 server:
@@ -21,3 +21,10 @@ spring:
     active: dev
   application:
     name: comment-service
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
