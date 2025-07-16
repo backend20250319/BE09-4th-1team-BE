@@ -37,6 +37,7 @@ public class UserDataInitializer implements CommandLineRunner {
                 .createdAt(LocalDateTime.now())
                 .lastChangedPassword(LocalDateTime.now())
                 .lastLogin(LocalDateTime.now())
+                .profileImageUrl(null)
                 .build(),
 
             // -------------------------------------------------------------------
@@ -53,6 +54,7 @@ public class UserDataInitializer implements CommandLineRunner {
                     .createdAt(LocalDateTime.now())
                     .lastChangedPassword(LocalDateTime.now())
                     .lastLogin(LocalDateTime.now())
+                    .profileImageUrl(null)
                     .build(),
 
             // -------------------------------------------------------------------
@@ -69,6 +71,7 @@ public class UserDataInitializer implements CommandLineRunner {
                     .createdAt(LocalDateTime.now())
                     .lastChangedPassword(LocalDateTime.now())
                     .lastLogin(LocalDateTime.now())
+                    .profileImageUrl(null)
                     .build()
             );
 
