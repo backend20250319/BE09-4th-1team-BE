@@ -62,6 +62,9 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime lastLogin;
 
+    @Column()
+    private String profileImageUrl;
+
     public void changePassword(String encodedPassword) {
         this.password = encodedPassword;
         this.passwordStatus = PasswordStatus.CHANGED;
@@ -82,5 +85,9 @@ public class User {
 
     public void setIsBanned(boolean isBanned) {
         this.isBanned = isBanned;
+    }
+
+    public void setProfileImageUrl(String url) {
+        this.profileImageUrl = url;
     }
 }

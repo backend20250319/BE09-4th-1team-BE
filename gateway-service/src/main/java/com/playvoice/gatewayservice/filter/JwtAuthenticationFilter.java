@@ -73,6 +73,8 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     }
 
     private boolean isExcludedPath(String path) {
+        // /uploads/로 시작하는 모든 경로를 예외 처리
+        if (path.startsWith("/uploads/")) return true;
         return EXCLUDED_PATHS.stream().anyMatch(path::endsWith);
     }
 

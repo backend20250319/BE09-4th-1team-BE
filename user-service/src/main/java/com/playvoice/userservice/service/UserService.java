@@ -7,10 +7,26 @@ import com.playvoice.userservice.entity.PasswordStatus;
 import com.playvoice.userservice.entity.User;
 import com.playvoice.userservice.entity.UserRole;
 import com.playvoice.userservice.repository.UserRepository;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
+import static org.bouncycastle.asn1.x509.Extensions.getExtension;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.springframework.web.multipart.MultipartFile;
+
 
 @Service
 @RequiredArgsConstructor
@@ -136,6 +152,73 @@ public class UserService {
         return new UserResponseDTO(user.getId(), user.getEmail(), user.getUsername(),
             user.getName(), user.getRole(), user.getCourse(), user.getIsBanned(),
             user.getPasswordStatus(), user.getCreatedAt(), user.getLastChangedPassword(),
-            user.getLastLogin());
+            user.getLastLogin(), user.getProfileImageUrl());
+    }
+
+    public String uploadProfileImage(Long userId, MultipartFile file) {
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User Not Found"));
+
+            // 확장자 및 용량 체크 (보안)
+            String originalName = file.getOriginalFilename();
+            String ext = "";
+            if (originalName != null && originalName.contains(".")) {
+                ext = originalName.substring(originalName.lastIndexOf(".")).toLowerCase();
+            } else {
+                throw new IllegalArgumentException("파일 확장자가 없습니다. jpg, png, svg 파일만 업로드 가능합니다.");
+            }
+            if (!ext.matches("\\.(jpg|png|svg)$")) {
+                throw new IllegalArgumentException("jpg, png, svg 파일만 업로드 가능합니다.");
+            }
+            if (file.getSize() > 2 * 1024 * 1024) {
+                throw new IllegalArgumentException("2MB 이하 파일만 업로드 가능합니다.");
+            }
+
+            String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
+            Files.createDirectories(Paths.get(uploadDir));
+
+            // 기존 이미지 삭제
+            if (user.getProfileImageUrl() != null && !user.getProfileImageUrl().isEmpty() && !user.getProfileImageUrl().contains("default")) {
+                File oldFile = new File(uploadDir + File.separator + user.getProfileImageUrl().substring(user.getProfileImageUrl().lastIndexOf("/") + 1));
+                if (oldFile.exists()) oldFile.delete();
+            }
+
+            // 파일명에 확장자 반드시 포함
+            String fileName;
+            if (!ext.isEmpty() && (ext.equals(".png") || ext.equals(".jpg") || ext.equals(".svg"))) {
+                fileName = "user_" + userId + "_" + System.currentTimeMillis() + ext;
+            } else {
+                throw new IllegalArgumentException("파일 확장자가 올바르지 않습니다. (jpg, png, svg)");
+            }
+            java.nio.file.Path savePath = Paths.get(uploadDir, fileName);
+            file.transferTo(savePath.toFile());
+
+            String url = "/uploads/" + fileName;
+            user.setProfileImageUrl(url);
+            userRepository.save(user);
+            return url;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("이미지 저장 실패: " + e.getMessage());
+        }
+    }
+
+    public String deleteProfileImage(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User Not Found"));
+
+        String uploadDir = System.getProperty("user.dir") + File.separator + "uploads";
+
+        // 기존 파일 삭제
+        if (user.getProfileImageUrl() != null && user.getProfileImageUrl().startsWith("/uploads/")) {
+            java.nio.file.Path filePath = java.nio.file.Paths.get(uploadDir, java.nio.file.Paths.get(user.getProfileImageUrl()).getFileName().toString());
+            try { java.nio.file.Files.deleteIfExists(filePath); } catch (IOException ignored) {}
+        }
+
+        user.setProfileImageUrl(null); // 기본 이미지 경로가 아니라 null로 저장
+        userRepository.save(user);
+
+        return null; // 반환값도 null
     }
 }

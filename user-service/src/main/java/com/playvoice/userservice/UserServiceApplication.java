@@ -11,7 +11,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 public class UserServiceApplication {
 
     public static void main(String[] args) {
-
+        System.out.println("user.dir: " + System.getProperty("user.dir"));
         SpringApplication.run(UserServiceApplication.class, args);
     }
 
