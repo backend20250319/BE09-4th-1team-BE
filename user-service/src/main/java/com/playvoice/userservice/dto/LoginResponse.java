@@ -14,4 +14,6 @@ public class LoginResponse {
     private UserRole role;
     private PasswordStatus passwordStatus;
     private String course;
+    private Long userId;
+    private String name;
 }
