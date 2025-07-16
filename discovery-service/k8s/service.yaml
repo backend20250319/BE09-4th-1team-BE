@@ -9,4 +9,5 @@ spec:
     - protocol: TCP
       port: 8761
       targetPort: 8761
+      nodePort: 8761  # 외부 포트
   type: NodePort
