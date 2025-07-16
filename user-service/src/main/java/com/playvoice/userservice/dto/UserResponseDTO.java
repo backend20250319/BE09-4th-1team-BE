@@ -15,7 +15,8 @@ public record UserResponseDTO(
     PasswordStatus passwordStatus,
     LocalDateTime createdAt,
     LocalDateTime lastChangedPassword,
-    LocalDateTime lastLogin
+    LocalDateTime lastLogin,
+    String profileImageUrl
 ) {
 
 }

@@ -30,6 +30,11 @@ spring:
           filters:
             - RewritePath=/api/v1/user-service/(?<segment>.*), /${segment}
 
+        - id: user-service-uploads
+          uri: lb://PLAYVOICE-USER-SERVICE
+          predicates:
+            - Path=/uploads/**
+
         - id: post-service
           uri: lb://POST-SERVICE
           predicates:

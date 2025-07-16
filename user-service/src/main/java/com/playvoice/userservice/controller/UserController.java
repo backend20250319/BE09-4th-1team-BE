@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 
@@ -148,5 +149,18 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         UserResponseDTO dto = userService.findById(id);
         return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/me/img")
+    public ResponseEntity<String> uploadProfileImage(@RequestParam("image")MultipartFile file,
+                                                     @AuthenticationPrincipal String userId) {
+        String uploadedUrl = userService.uploadProfileImage(Long.valueOf(userId), file);
+        return ResponseEntity.ok(uploadedUrl);
+    }
+
+    @DeleteMapping("/me/img")
+    public ResponseEntity<String> deleteProfileImage(@AuthenticationPrincipal String userId) {
+        String url = userService.deleteProfileImage(Long.valueOf(userId));
+        return ResponseEntity.ok(url);
     }
 }

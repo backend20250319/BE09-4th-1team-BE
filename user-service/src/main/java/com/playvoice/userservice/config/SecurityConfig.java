@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/uploads/**").permitAll()
                 .requestMatchers(HttpMethod.POST,
                     "/auth/login",
                     "/auth/refresh",
