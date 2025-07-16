@@ -221,4 +221,24 @@ public class UserService {
 
         return null; // 반환값도 null
     }
+
+    public java.util.List<UserResponseDTO> findAllManagers() {
+        return userRepository.findAll().stream()
+            .filter(user -> user.getRole() == UserRole.MANAGER)
+            .map(user -> new UserResponseDTO(
+                user.getId(),
+                user.getEmail(),
+                user.getUsername(),
+                user.getName(),
+                user.getRole(),
+                user.getCourse(),
+                user.getIsBanned(),
+                user.getPasswordStatus(),
+                user.getCreatedAt(),
+                user.getLastChangedPassword(),
+                user.getLastLogin(),
+                user.getProfileImageUrl()
+            ))
+            .collect(java.util.stream.Collectors.toList());
+    }
 }

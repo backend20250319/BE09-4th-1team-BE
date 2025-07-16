@@ -35,6 +35,7 @@ public class SecurityConfig {
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/uploads/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users/managers", "/users/managers/").permitAll()
                 .requestMatchers(HttpMethod.POST,
                     "/auth/login",
                     "/auth/refresh",
