@@ -8,7 +8,7 @@ public enum Status {
 //    상담완료,
 //    상담취소 x
 Approved,
-    Canceled,
+    Cancelled,
     Waiting,
     Rejected,
     Completed
