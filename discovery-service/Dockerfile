@@ -1,12 +1,4 @@
-# 1단계: 빌드용
-FROM gradle:8.4-jdk17 AS builder
+FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY . .
-RUN gradle clean build -x test
-
-# 2단계: 실행용
-FROM eclipse-temurin:17-jdk-alpine
-WORKDIR /app
-COPY --from=builder /app/build/libs/*.jar app.jar
-EXPOSE 8761
+COPY build/libs/discovery-service-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
