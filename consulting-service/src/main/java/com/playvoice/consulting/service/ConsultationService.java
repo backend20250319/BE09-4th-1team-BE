@@ -35,7 +35,7 @@ public class ConsultationService {
         newSession.setLocalDateTime(dateTime);
         newSession.setConsultationDate(dateTime.toLocalDate());
         newSession.setReservationTime(LocalDateTime.now());
-        newSession.setStatus(Status.예약대기); // 기본 상태 설정
+        newSession.setStatus(Status.Waiting); // 기본 상태 설정
         consultationRepository.save(newSession);
         return newSession.getSessionId();
     }
@@ -46,7 +46,7 @@ public class ConsultationService {
         Optional<ConsultationSession> sessionOptional = consultationRepository.findById(sessionId);
         if (sessionOptional.isPresent()) {
             ConsultationSession session = sessionOptional.get();
-            if (session.getStatus() != Status.상담완료) {
+            if (session.getStatus() != Status.Completed) {
                 return false;  // 상담이 완료되지 않았으면 저장하지 않음
             }
             session.setConsultationText(consultationText);
@@ -66,7 +66,7 @@ public class ConsultationService {
         }
 
         ConsultationSession session = sessionOptional.get();
-        session.setStatus(Status.예약취소);
+        session.setStatus(Status.Canceled);
         session.setCancelTime(LocalDateTime.now());
 
         consultationRepository.save(session);
