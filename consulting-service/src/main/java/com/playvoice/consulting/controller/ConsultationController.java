@@ -24,16 +24,17 @@ public class ConsultationController {
     private final ConsultationService consultationService;
 
     // 1. 상담 예약 생성 API
-    @PostMapping
-    public ResponseEntity<ResponseMessage> insertConsultation(@Valid @RequestBody ConsultationDetailsDto consultationDetailsDto) {
-        log.info("수신된 상담 예약 요청: {}", consultationDetailsDto);
-        try {
-            Long sessionId = consultationService.createNewSession(
-                    consultationDetailsDto.getUserId(),
-                    consultationDetailsDto.getManagerId(),
-                    consultationDetailsDto.getLocalDateTime()
-            );
-
+   @PostMapping
+public ResponseEntity<ResponseMessage> insertConsultation(
+    @Valid @RequestBody ConsultationDetailsDto consultationDetailsDto,
+    @RequestHeader("X-User-Id") String userId) {
+    log.info("수신된 상담 예약 요청: {}", consultationDetailsDto);
+    try {
+        Long sessionId = consultationService.createNewSession(
+            userId, // 헤더에서 받은 userId만 사용
+            consultationDetailsDto.getManagerId(),
+            consultationDetailsDto.getLocalDateTime()
+        );
             Map<String, Object> results = new HashMap<>();
             results.put("sessionId", sessionId);
 
