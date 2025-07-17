@@ -25,4 +25,5 @@ public interface SuggestionPostRepository {
     public void deleteUnlike(SuggestionPost suggestionPost, Long userId);
 
     Page<SuggestionPost> findAll(Pageable pageable);
+    Page<SuggestionPost> findAllByUserId(Long userId, Pageable pageable);
 }

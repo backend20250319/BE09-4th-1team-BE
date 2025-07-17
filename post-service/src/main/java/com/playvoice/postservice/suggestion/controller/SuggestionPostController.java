@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -101,6 +102,14 @@ public class SuggestionPostController {
         @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<GetSuggestionPostResponseDto> suggestionPosts = suggestionPostService.getAllSuggestions(
             pageable);
+        return ResponseEntity.ok(ApiResponse.success(suggestionPosts));
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<Page<GetSuggestionPostResponseDto>>> getMySuggestionPosts(
+        @org.springframework.web.bind.annotation.RequestParam("userId") Long userId,
+        @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<GetSuggestionPostResponseDto> suggestionPosts = suggestionPostService.getAllSuggestionsByUserId(userId, pageable);
         return ResponseEntity.ok(ApiResponse.success(suggestionPosts));
     }
 }

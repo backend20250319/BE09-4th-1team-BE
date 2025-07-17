@@ -26,18 +26,18 @@ public class UserDataInitializer implements CommandLineRunner {
             List<User> user = List.of(
 
             User.builder()
-                .email("manager1@example.com")
+                .email("서현@playvoice.com")
                 .username("manager1")
                 .password(passwordEncoder.encode("manager1"))
                 .name("박서현")
                 .role(UserRole.MANAGER)
-                .course("Manager")
+                .course("수석매니저")
                 .isBanned(false)
                 .passwordStatus(PasswordStatus.INIT)
                 .createdAt(LocalDateTime.now())
                 .lastChangedPassword(LocalDateTime.now())
                 .lastLogin(LocalDateTime.now())
-                .profileImageUrl(null)
+                .profileImageUrl("/uploads/user_1_1752729780232.png")
                 .build(),
 
             // -------------------------------------------------------------------
