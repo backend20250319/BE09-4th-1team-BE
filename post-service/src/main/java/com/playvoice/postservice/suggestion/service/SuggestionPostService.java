@@ -114,4 +114,13 @@ public class SuggestionPostService {
                 return GetSuggestionPostResponseDto.createDto(suggestionPost, username);
             }));
     }
+
+    public Page<GetSuggestionPostResponseDto> getAllSuggestionsByUserId(Long userId, Pageable pageable) {
+        return suggestionPostRepository.findAllByUserId(userId, pageable)
+            .map((suggestionPost -> {
+                String username = userServiceClient.getUserById(suggestionPost.getUserId())
+                    .name();
+                return GetSuggestionPostResponseDto.createDto(suggestionPost, username);
+            }));
+    }
 }

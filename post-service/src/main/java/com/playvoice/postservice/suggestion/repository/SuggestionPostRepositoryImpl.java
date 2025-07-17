@@ -80,4 +80,10 @@ public class SuggestionPostRepositoryImpl implements SuggestionPostRepository {
 
         return entities.map(SuggestionPostEntity::toSuggestionPost);
     }
+
+    @Override
+    public Page<SuggestionPost> findAllByUserId(Long userId, Pageable pageable) {
+        Page<SuggestionPostEntity> entities = jpaSuggestionPostRepository.findAllByUserId(userId, pageable);
+        return entities.map(SuggestionPostEntity::toSuggestionPost);
+    }
 }
